@@ -55,24 +55,31 @@ struct Dashboard: View {
 				WorkoutEditor(workout: workout, onComplete: {})
 			}
 		}
-		
 	}
 }
 
+// This should allow editing an existing or a new workout
 struct WorkoutEditor: View {
 	let workoutOG: WorkoutRecord
-	@State private var workout: WorkoutRecord
 	var onComplete: () -> Void
 	@Query private var exercises: [Exercise]
 	@Environment(\.modelContext) private var modelContext
 	
+	@State private var exerciseRecords = [ExerciseRecord]()
+	
+	init(workout: WorkoutRecord, onComplete: @escaping () -> Void) {
+		self.workoutOG = workout
+		self._exerciseRecords = State(initialValue: workout.exercises.map{ $0.copy() })
+		self.onComplete = onComplete
+	}
+	
 	var body: some View {
 		VStack(alignment: .leading) {
 			Button("Add Exercise", action: addExercise)
-			ForEach(workout.exercises) { exercise in
+			ForEach(exerciseRecords) { exercise in
 				ExerciseRecordEditor(exercise: exercise) {
-					if let index = workout.exercises.firstIndex(where: { $0 == exercise }) {
-						workout.exercises.remove(at: index)
+					if let index = exerciseRecords.firstIndex(where: { $0 == exercise }) {
+						exerciseRecords.remove(at: index)
 					}
 					modelContext.delete(exercise)
 				}
@@ -87,25 +94,54 @@ struct WorkoutEditor: View {
 			
 			Button("Cancel Workout") {
 				onComplete()
+				
 				// Clean up the temporary edit workout
-				modelContext.delete(workout)
+//				modelContext.delete(workout)
+				try? modelContext.transaction {
+					exerciseRecords.forEach{ modelContext.delete($0) }
+				}
 			}
-		}
+	}
 		.frame(maxWidth: .infinity)
 		.padding()
-	}
-	
-	init(workout: WorkoutRecord, onComplete: @escaping () -> Void) {
-		self.workoutOG = workout
-		self._workout = State(initialValue: workout)
-		self.onComplete = onComplete
+		.onDisappear {
+			try? modelContext.transaction {
+				exerciseRecords.forEach{ modelContext.delete($0) }
+			}
+		}
 	}
 	
 	func addExercise() {
 		let exerciseRecord = ExerciseRecord()
 		exerciseRecord.details = exercises.randomElement()
-		workout.exercises.append(exerciseRecord)
+		exerciseRecords.append(exerciseRecord)
 	}
+}
+
+extension WorkoutRecord {
+	func copy() -> WorkoutRecord {
+		let copy = WorkoutRecord(name: self.name)
+		copy.isCurrentWorkout = self.isCurrentWorkout
+		copy.exercises = self.exercises.map{ exercise in
+			return exercise.copy()
+		}
+		return copy
+	}
+}
+
+extension ExerciseRecord {
+	func copy() -> ExerciseRecord {
+		let copy = ExerciseRecord()
+		copy.sets = self.sets
+		copy.details = self.details
+		return copy
+	}
+	
+//	convenience init(from exerciseRecord: ExerciseRecord) {
+//		self.init()
+//		self.details = exerciseRecord.details
+//		self.sets = exerciseRecord.sets
+//	}
 }
 
 struct ExerciseRecordEditor: View {
@@ -125,8 +161,6 @@ struct ExerciseRecordEditor: View {
 			
 			if exercise.sets.count > 0 {
 				HStack {
-					Rectangle()
-						.frame(width: 1)
 					VStack {
 						ForEach($exercise.sets) { set in
 							SetRecordEditor(set: set, delete: {
@@ -134,7 +168,12 @@ struct ExerciseRecordEditor: View {
 									exercise.sets.remove(at: index)
 								}
 							})
+							.padding(.leading)
 						}
+					}
+					.overlay(alignment: .leading) {
+						Rectangle()
+							.frame(width: 1)
 					}
 				}
 				.padding(.leading)
