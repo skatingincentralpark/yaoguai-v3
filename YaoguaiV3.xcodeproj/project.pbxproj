@@ -15,6 +15,8 @@
 		A11F26842C3AB18D00FD971E /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26832C3AB18D00FD971E /* Dashboard.swift */; };
 		A11F26862C3C148100FD971E /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26852C3C148100FD971E /* TestView.swift */; };
 		A11F26882C3E90D500FD971E /* DashboardV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26872C3E90D500FD971E /* DashboardV2.swift */; };
+		A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */; };
+		A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F268B2C408B4600FD971E /* WorkoutManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 		A11F26832C3AB18D00FD971E /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		A11F26852C3C148100FD971E /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		A11F26872C3E90D500FD971E /* DashboardV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardV2.swift; sourceTree = "<group>"; };
+		A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialFocusTextStyle.swift; sourceTree = "<group>"; };
+		A11F268B2C408B4600FD971E /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +66,9 @@
 				A11F26712C3AA6CC00FD971E /* YaoguaiV3App.swift */,
 				A11F26732C3AA6CC00FD971E /* ContentView.swift */,
 				A11F26832C3AB18D00FD971E /* Dashboard.swift */,
+				A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */,
 				A11F26872C3E90D500FD971E /* DashboardV2.swift */,
+				A11F268B2C408B4600FD971E /* WorkoutManager.swift */,
 				A11F26852C3C148100FD971E /* TestView.swift */,
 				A11F26812C3AA80000FD971E /* Record.swift */,
 				A11F26772C3AA6CE00FD971E /* Assets.xcassets */,
@@ -154,6 +160,8 @@
 				A11F26822C3AA80000FD971E /* Record.swift in Sources */,
 				A11F26842C3AB18D00FD971E /* Dashboard.swift in Sources */,
 				A11F26882C3E90D500FD971E /* DashboardV2.swift in Sources */,
+				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
+				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,
 				A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

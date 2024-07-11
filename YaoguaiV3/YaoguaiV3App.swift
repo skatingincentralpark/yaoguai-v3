@@ -17,6 +17,10 @@ struct YaoguaiV3App: App {
 		let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 		
 		do {
+			let modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+//			try modelContainer.mainContext.delete(model: Exercise.self)
+//			try modelContainer.mainContext.delete(model: ExerciseRecord.self)
+//			try modelContainer.mainContext.delete(model: WorkoutRecord.self)
 			return try ModelContainer(for: schema, configurations: [modelConfiguration])
 		} catch {
 			fatalError("Could not create ModelContainer: \(error)")
@@ -25,7 +29,7 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+			DashboardV2()
 		}
 		.modelContainer(sharedModelContainer)
 	}
