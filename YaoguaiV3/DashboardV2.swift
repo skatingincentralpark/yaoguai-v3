@@ -16,35 +16,80 @@ struct DashboardV2: View {
 	@Query private var workoutRecords: [WorkoutRecord]
 	
 	// For new workouts (presented on main screen)
-	@State private var currentWorkout: WorkoutRecord? = nil
+	@Bindable var workoutManager: WorkoutManager
 	
 	// For existing workouts (presented in sheet)
 	@State private var workoutBeingEdited: WorkoutRecord? = nil
 	
+	func readIdFromQueriedWorkoutsAndReadProperty() {
+		print("🌞")
+		
+		let id = workoutRecords[0].id
+		let workout = modelContext.model(for: id) as? WorkoutRecord
+		
+		print("reading from query")
+		if let workout {
+			print(workout.id)
+			print(workout.name)
+		}
+		
+		do {
+			let savePath = URL.documentsDirectory.appending(path: "CurrentWorkout")
+			let data = try Data(contentsOf: savePath)
+			let savedId = try JSONDecoder().decode(PersistentIdentifier.self, from: data)
+			
+			print("reading from documents")
+			if let savedWorkout = modelContext.model(for: savedId) as? WorkoutRecord {
+				print(savedWorkout.id)
+				print(savedWorkout.name)
+			}
+		} catch {
+			print("Error")
+		}
+		
+		print("🌝")
+	}
+	
 	var body: some View {
 		NavigationStack {
 			ScrollView {
-				Button("Add Dummy Exercise Details") {
-					let pullups = Exercise(name: "Pullups")
-					let pushups = Exercise(name: "Pushups")
-					
-					modelContext.insert(pullups)
-					modelContext.insert(pushups)
-				}
-
-				Button("Start New Workout", action: startNewWorkout)
-				
-				ForEach(workoutRecords) { workout in
+				if let currentWorkout = workoutManager.currentWorkout {
 					HStack {
-						Text(workout.name)
-						Button("Edit") {
-							workoutBeingEdited = workout
-						}
-						Button("Delete") {
-							modelContext.delete(workout)
+						Button("Cancel", action: workoutManager.cancel)
+						
+						Button("Read from queried", action: {
+							print("Test")
+							readIdFromQueriedWorkoutsAndReadProperty()
+						})
+						.buttonStyle(.bordered)
+						
+					}
+					WorkoutEditorV2(workoutId: currentWorkout.id, in: modelContext.container, autosave: true)
+				} else {
+					Button("Add Dummy Exercise Details") {
+						let pullups = Exercise(name: "Pullups")
+						let pushups = Exercise(name: "Pushups")
+						
+						modelContext.insert(pullups)
+						modelContext.insert(pushups)
+					}
+					
+					Button("Start New Workout", action: workoutManager.startNewWorkout).buttonStyle(.bordered)
+					
+					ForEach(workoutRecords) { workout in
+						HStack {
+							Text(workout.name)
+							Button("Edit") {
+								workoutBeingEdited = workout
+							}
+							Button("Delete") {
+								modelContext.delete(workout)
+							}
 						}
 					}
 				}
+				
+				
 			}
 			.safeAreaInset(edge: .bottom) {
 				VStack {
@@ -59,17 +104,10 @@ struct DashboardV2: View {
 			.sheet(item: $workoutBeingEdited) { workout in
 				WorkoutEditorV2(workoutId: workout.id, in: modelContext.container)
 			}
-			.sheet(item: $currentWorkout) { workout in
-				WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
-			}
+//			.sheet(item: $workoutManager.currentWorkout) { workout in
+//				WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
+//			}
 		}
-	}
-	
-	private func startNewWorkout() {
-		let newWorkout = WorkoutRecord(name: "Blabla")
-		modelContext.insert(newWorkout)
-		// Forces code to run on next runloop, similar to process.nextTick
-		Task { currentWorkout = newWorkout }
 	}
 }
 
@@ -106,6 +144,8 @@ struct WorkoutEditorV2: View {
 		NavigationStack {
 			ScrollView {
 				VStack(alignment: .leading) {
+					
+					TextField("Name", text: $workout.name)
 					Button("Add Random Exercise") {
 						if let exerciseDetails = exercises.randomElement() {
 							let record = ExerciseRecord()
@@ -199,7 +239,7 @@ struct ExerciseRecordEditor: View {
 							.padding(.leading)
 						}
 						
-											
+						
 					}
 					.overlay(alignment: .leading) {
 						Rectangle()
@@ -215,7 +255,7 @@ struct ExerciseRecordEditor: View {
 //struct SetRecordEditor: View {
 //	@Binding var set: SetRecord
 //	var delete: () -> Void
-//	
+//
 //	var body: some View {
 //		HStack {
 //			Text("Set")
@@ -297,7 +337,9 @@ struct SetRecordEditor: View {
 		
 		addWorkoutRecord()
 		
-		return DashboardV2()
+		let workoutManager = WorkoutManager(modelContext: modelContainer.mainContext)
+		
+		return DashboardV2(workoutManager: workoutManager)
 			.modelContainer(modelContainer)
 	} catch {
 		return Text("Problem bulding ModelContainer.")
