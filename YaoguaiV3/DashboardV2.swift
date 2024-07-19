@@ -18,53 +18,25 @@ struct DashboardV2: View {
 	// For new workouts (presented on main screen)
 	@Bindable var workoutManager: WorkoutManager
 	
+	@State var newWorkoutSheetShowing = false
+	
 	// For existing workouts (presented in sheet)
 	@State private var workoutBeingEdited: WorkoutRecord? = nil
-	
-	func readIdFromQueriedWorkoutsAndReadProperty() {
-		print("🌞")
-		
-		let id = workoutRecords[0].id
-		let workout = modelContext.model(for: id) as? WorkoutRecord
-		
-		print("reading from query")
-		if let workout {
-			print(workout.id)
-			print(workout.name)
-		}
-		
-		do {
-			let savePath = URL.documentsDirectory.appending(path: "CurrentWorkout")
-			let data = try Data(contentsOf: savePath)
-			let savedId = try JSONDecoder().decode(PersistentIdentifier.self, from: data)
-			
-			print("reading from documents")
-			if let savedWorkout = modelContext.model(for: savedId) as? WorkoutRecord {
-				print(savedWorkout.id)
-				print(savedWorkout.name)
-			}
-		} catch {
-			print("Error")
-		}
-		
-		print("🌝")
-	}
 	
 	var body: some View {
 		NavigationStack {
 			ScrollView {
-				if let currentWorkout = workoutManager.currentWorkout {
-					HStack {
-						Button("Cancel", action: workoutManager.cancel)
-						
-						Button("Read from queried", action: {
-							print("Test")
-							readIdFromQueriedWorkoutsAndReadProperty()
-						})
-						.buttonStyle(.bordered)
-						
+				if workoutManager.currentWorkout != nil {
+					Button("Continue Workout"){
+						newWorkoutSheetShowing.toggle()
 					}
-					WorkoutEditorV2(workoutId: currentWorkout.id, in: modelContext.container, autosave: true)
+					.buttonStyle(.bordered)
+					
+					Button("Cancel Workout", role: .destructive){
+						workoutManager.cancel()
+					}
+					.buttonStyle(.bordered)
+					.tint(.red)
 				} else {
 					Button("Add Dummy Exercise Details") {
 						let pullups = Exercise(name: "Pullups")
@@ -74,7 +46,11 @@ struct DashboardV2: View {
 						modelContext.insert(pushups)
 					}
 					
-					Button("Start New Workout", action: workoutManager.startNewWorkout).buttonStyle(.bordered)
+					Button("Start New Workout"){
+						workoutManager.startNewWorkout()
+						newWorkoutSheetShowing.toggle()
+					}
+						.buttonStyle(.bordered)
 					
 					ForEach(workoutRecords) { workout in
 						HStack {
@@ -91,6 +67,7 @@ struct DashboardV2: View {
 				
 				
 			}
+			.padding()
 			.safeAreaInset(edge: .bottom) {
 				VStack {
 					Text("exercises count: \(exercises.count)")
@@ -104,9 +81,13 @@ struct DashboardV2: View {
 			.sheet(item: $workoutBeingEdited) { workout in
 				WorkoutEditorV2(workoutId: workout.id, in: modelContext.container)
 			}
-//			.sheet(item: $workoutManager.currentWorkout) { workout in
-//				WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
-//			}
+			.sheet(isPresented: $newWorkoutSheetShowing) {
+				if let workout = workoutManager.currentWorkout {
+					WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
+				} else {
+					Text("Loading...")
+				}
+			}
 		}
 	}
 }
@@ -144,7 +125,6 @@ struct WorkoutEditorV2: View {
 		NavigationStack {
 			ScrollView {
 				VStack(alignment: .leading) {
-					
 					TextField("Name", text: $workout.name)
 					Button("Add Random Exercise") {
 						if let exerciseDetails = exercises.randomElement() {
@@ -168,14 +148,9 @@ struct WorkoutEditorV2: View {
 				.padding()
 				.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 				.toolbar {
-					ToolbarItem(placement: .principal) {
-						Text(title)
-							.bold()
-					}
-					
 					if modelContext.autosaveEnabled {
-						ToolbarItem(placement: .cancellationAction) {
-							Button("Cancel") {
+						ToolbarItem(placement: .destructiveAction) {
+							Button("Discard", role: .destructive) {
 								/// Deleting from this peer context doesn't remove the relationships... via the deleteRule
 								/// So need to do it explicity.  WTF.
 								try? modelContext.transaction {
@@ -185,22 +160,24 @@ struct WorkoutEditorV2: View {
 								}
 								dismiss()
 							}
+							.tint(.red)
 						}
-					} else {
-						ToolbarItem(placement: .cancellationAction) {
-							Button("Discard") {
-								dismiss()
-							}
+					}
+					
+					ToolbarItem(placement: .cancellationAction) {
+						Button(modelContext.autosaveEnabled ? "Hide" : "Discard") {
+							dismiss()
 						}
 					}
 					
 					ToolbarItem(placement: .confirmationAction) {
-						Button("Save") {
+						Button(modelContext.autosaveEnabled ? "Complete" : "Save") {
 							print(workout)
 							modelContext.insert(workout)
 							try? modelContext.save()
 							dismiss()
 						}
+						.tint(.green)
 					}
 				}
 			}
@@ -251,18 +228,6 @@ struct ExerciseRecordEditor: View {
 		}
 	}
 }
-
-//struct SetRecordEditor: View {
-//	@Binding var set: SetRecord
-//	var delete: () -> Void
-//
-//	var body: some View {
-//		HStack {
-//			Text("Set")
-//			Button("Delete", action: delete)
-//		}
-//	}
-//}
 
 struct SetRecordEditor: View {
 	@Binding var set: SetRecord

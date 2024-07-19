@@ -94,6 +94,25 @@ final class WorkoutManager {
 	}
 	
 	@MainActor
+	func complete() {
+		if let currentWorkout {
+			modelContext.insert(currentWorkout)
+		}
+		
+		self.currentWorkoutId = nil
+		self.currentWorkout = nil
+		
+		Task(priority: .background) {
+			do {
+				try FileManager.default.removeItem(at: savePath)
+				print("Removed workoutId from documents.")
+			} catch {
+				print("Unable to delete saved workout file.  \(error.localizedDescription)")
+			}
+		}
+	}
+	
+	@MainActor
 	func startNewWorkout() {
 		print("Starting workout.")
 		
