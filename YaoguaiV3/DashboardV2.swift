@@ -79,26 +79,22 @@ struct DashboardV2: View {
 				.background(.bar)
 			}
 			.sheet(item: $workoutBeingEdited) { workout in
-				WorkoutEditorV2(workoutId: workout.id, in: modelContext.container)
+				WorkoutEditorV2(workout: workout)
 			}
-			.sheet(isPresented: $newWorkoutSheetShowing) {
-				if let workout = workoutManager.currentWorkout {
-					WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
-				} else {
-					Text("Loading...")
-				}
-			}
+//			.sheet(isPresented: $newWorkoutSheetShowing) {
+//				if let workout = workoutManager.currentWorkout {
+//					WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
+//				} else {
+//					Text("Loading...")
+//				}
+//			}
 		}
 	}
 }
 
-struct WorkoutEditorV2: View {
-	@Environment(\.dismiss) var dismiss
+struct WorkoutEditorWrapper: View {
 	@Bindable var workout: WorkoutRecord
-	@Query private var exercises: [Exercise]
-	
 	var modelContext: ModelContext
-	
 	/// Since workoutId is of type PersistentIdentifier, the ID needs to belong to an object that's been inserted
 	/// into the context already, otherwise bugs will appear.
 	///
@@ -106,81 +102,103 @@ struct WorkoutEditorV2: View {
 	/// track of the ID of the model so we can persist the current workout.
 	///
 	/// I just need to remove it if it's cancelled.
-	init(workoutId: PersistentIdentifier, in container: ModelContainer, autosave: Bool = false) {
+	init(workoutId: PersistentIdentifier,
+		 in container: ModelContainer,
+		 autosave: Bool = false
+	) {
 		modelContext = ModelContext(container)
 		modelContext.autosaveEnabled = autosave
 		workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
 	}
 	
-	func getExerciseDetail(for exerciseId: PersistentIdentifier) -> Exercise {
-		return modelContext.model(for: exerciseId) as? Exercise ?? Exercise(name: "AUTO_GENERATED")
+	var body: some View {
+		Text("")
+//			.toolbar {
+//				if modelContext.autosaveEnabled {
+//					ToolbarItem(placement: .destructiveAction) {
+//						Button("Discard", role: .destructive) {
+//							/// Deleting from this peer context doesn't remove the relationships... via the deleteRule
+//							/// So need to do it explicity.  WTF.
+//							try? modelContext.transaction {
+//								workout.exercises.forEach { modelContext.delete($0) }
+//								modelContext.delete(workout)
+//								try? modelContext.save()
+//							}
+//							dismiss()
+//						}
+//						.tint(.red)
+//					}
+//				}
+//				
+//				ToolbarItem(placement: .cancellationAction) {
+//					Button(modelContext.autosaveEnabled ? "Hide" : "Discard") {
+//						dismiss()
+//					}
+//				}
+//				
+//				ToolbarItem(placement: .confirmationAction) {
+//					Button(modelContext.autosaveEnabled ? "Complete" : "Save") {
+//						print(workout)
+//						modelContext.insert(workout)
+//						try? modelContext.save()
+//						dismiss()
+//					}
+//					.tint(.green)
+//				}
+//			}
 	}
-	
-	var title: String {
-		if modelContext.autosaveEnabled { return "New" }
-		return "Editing"
-	}
+}
+
+struct WorkoutEditorV2: View {
+	@Environment(\.dismiss) var dismiss
+	@Bindable var workout: WorkoutRecord
 	
 	var body: some View {
 		NavigationStack {
 			ScrollView {
 				VStack(alignment: .leading) {
 					TextField("Name", text: $workout.name)
-					Button("Add Random Exercise") {
-						if let exerciseDetails = exercises.randomElement() {
-							let record = ExerciseRecord()
-							record.details = getExerciseDetail(for: exerciseDetails.id)
-							workout.exercises.append(record)
-						}
-					}
-					.padding(.bottom)
-					
-					ForEach(workout.orderedExercises) { exercise in
-						ExerciseRecordEditor(exercise: exercise, delete: {
-							if let index = workout.exercises.firstIndex(where: { $0 == exercise }) {
-								workout.exercises.remove(at: index)
-							}
-							modelContext.delete(exercise)
-						})
-						.padding(.bottom)
-					}
+					AddRandomExerciseButton(workout: workout)
+					ExerciseList(workout: workout)
 				}
 				.padding()
 				.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-				.toolbar {
-					if modelContext.autosaveEnabled {
-						ToolbarItem(placement: .destructiveAction) {
-							Button("Discard", role: .destructive) {
-								/// Deleting from this peer context doesn't remove the relationships... via the deleteRule
-								/// So need to do it explicity.  WTF.
-								try? modelContext.transaction {
-									workout.exercises.forEach { modelContext.delete($0) }
-									modelContext.delete(workout)
-									try? modelContext.save()
-								}
-								dismiss()
-							}
-							.tint(.red)
-						}
-					}
-					
-					ToolbarItem(placement: .cancellationAction) {
-						Button(modelContext.autosaveEnabled ? "Hide" : "Discard") {
-							dismiss()
-						}
-					}
-					
-					ToolbarItem(placement: .confirmationAction) {
-						Button(modelContext.autosaveEnabled ? "Complete" : "Save") {
-							print(workout)
-							modelContext.insert(workout)
-							try? modelContext.save()
-							dismiss()
-						}
-						.tint(.green)
+			}
+		}
+	}
+	
+	struct ExerciseList: View {
+		@Bindable var workout: WorkoutRecord
+		@Environment(\.modelContext) private var modelContext
+		
+		var body: some View {
+			ForEach(workout.orderedExercises) { exercise in
+				ExerciseRecordEditor(exercise: exercise, delete: {
+					workout.exercises.removeFirst { $0 == exercise }
+					modelContext.delete(exercise)
+				})
+				.padding(.bottom)
+			}
+		}
+	}
+	
+	struct AddRandomExerciseButton: View {
+		@Query private var exercises: [Exercise]
+		@Bindable var workout: WorkoutRecord
+		
+		var body: some View {
+			Button("Add Random Exercise") {
+				if let exerciseDetails = exercises.randomElement() {
+					if let exerciseDetails = exercises.first {
+						let record = ExerciseRecord()
+						record.details = exerciseDetails
+						workout.exercises.append(record)
+					} else {
+						print("No exercises found.  None added.")
 					}
 				}
 			}
+			.padding(.bottom)
 		}
 	}
 }
