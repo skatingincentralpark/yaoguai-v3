@@ -64,8 +64,6 @@ struct DashboardV2: View {
 						}
 					}
 				}
-				
-				
 			}
 			.padding()
 			.safeAreaInset(edge: .bottom) {
@@ -79,7 +77,8 @@ struct DashboardV2: View {
 				.background(.bar)
 			}
 			.sheet(item: $workoutBeingEdited) { workout in
-				WorkoutEditorV2(workout: workout)
+//				WorkoutEditorV2(workout: workout)
+				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager)
 			}
 //			.sheet(isPresented: $newWorkoutSheetShowing) {
 //				if let workout = workoutManager.currentWorkout {
@@ -93,8 +92,13 @@ struct DashboardV2: View {
 }
 
 struct WorkoutEditorWrapper: View {
+	@Environment(\.dismiss) var dismiss
+	
 	@Bindable var workout: WorkoutRecord
-	var modelContext: ModelContext
+	@Bindable var workoutManager: WorkoutManager
+	let modelContext: ModelContext
+	let isNewWorkout: Bool
+	
 	/// Since workoutId is of type PersistentIdentifier, the ID needs to belong to an object that's been inserted
 	/// into the context already, otherwise bugs will appear.
 	///
@@ -104,62 +108,92 @@ struct WorkoutEditorWrapper: View {
 	/// I just need to remove it if it's cancelled.
 	init(workoutId: PersistentIdentifier,
 		 in container: ModelContainer,
-		 autosave: Bool = false
+		 isNewWorkout: Bool = false,
+		 workoutManager: WorkoutManager
 	) {
-		modelContext = ModelContext(container)
-		modelContext.autosaveEnabled = autosave
-		workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
+		self.modelContext = ModelContext(container)
+		self.isNewWorkout = isNewWorkout
+		self.modelContext.autosaveEnabled = isNewWorkout ? true : false
+		self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
+		self.workoutManager = workoutManager
 	}
 	
 	var body: some View {
-		Text("")
-//			.toolbar {
-//				if modelContext.autosaveEnabled {
-//					ToolbarItem(placement: .destructiveAction) {
-//						Button("Discard", role: .destructive) {
-//							/// Deleting from this peer context doesn't remove the relationships... via the deleteRule
-//							/// So need to do it explicity.  WTF.
-//							try? modelContext.transaction {
-//								workout.exercises.forEach { modelContext.delete($0) }
-//								modelContext.delete(workout)
-//								try? modelContext.save()
-//							}
-//							dismiss()
-//						}
-//						.tint(.red)
-//					}
-//				}
-//				
-//				ToolbarItem(placement: .cancellationAction) {
-//					Button(modelContext.autosaveEnabled ? "Hide" : "Discard") {
-//						dismiss()
-//					}
-//				}
-//				
-//				ToolbarItem(placement: .confirmationAction) {
-//					Button(modelContext.autosaveEnabled ? "Complete" : "Save") {
-//						print(workout)
-//						modelContext.insert(workout)
-//						try? modelContext.save()
-//						dismiss()
-//					}
-//					.tint(.green)
-//				}
-//			}
+		NavigationStack {
+			WorkoutEditorV2(workout: workout, modelContext: modelContext)
+				.toolbar {
+					if isNewWorkout {
+						ToolbarItem(placement: .confirmationAction) {
+							Button("") {
+								
+							}
+						}
+					} else {
+						ToolbarItem(placement: .confirmationAction) {
+							Button("Save") {
+								if modelContext.hasChanges {
+									try? modelContext.save()
+								}
+								dismiss()
+							}
+							.tint(.green)
+						}
+						
+						ToolbarItem(placement: .confirmationAction) {
+							Button("Cancel") {
+								dismiss()
+							}
+						}
+					}
+				}
+		}
+		//			.toolbar {
+		//				if modelContext.autosaveEnabled {
+		//					ToolbarItem(placement: .destructiveAction) {
+		//						Button("Discard", role: .destructive) {
+		//							/// Deleting from this peer context doesn't remove the relationships... via the deleteRule
+		//							/// So need to do it explicity.  WTF.
+		//							try? modelContext.transaction {
+		//								workout.exercises.forEach { modelContext.delete($0) }
+		//								modelContext.delete(workout)
+		//								try? modelContext.save()
+		//							}
+		//							dismiss()
+		//						}
+		//						.tint(.red)
+		//					}
+		//				}
+		//
+		//				ToolbarItem(placement: .cancellationAction) {
+		//					Button(modelContext.autosaveEnabled ? "Hide" : "Discard") {
+		//						dismiss()
+		//					}
+		//				}
+		//
+		//				ToolbarItem(placement: .confirmationAction) {
+		//					Button(modelContext.autosaveEnabled ? "Complete" : "Save") {
+		//						print(workout)
+		//						modelContext.insert(workout)
+		//						try? modelContext.save()
+		//						dismiss()
+		//					}
+		//					.tint(.green)
+		//				}
+		//			}
 	}
 }
 
 struct WorkoutEditorV2: View {
-	@Environment(\.dismiss) var dismiss
 	@Bindable var workout: WorkoutRecord
+	let modelContext: ModelContext
 	
 	var body: some View {
 		NavigationStack {
 			ScrollView {
 				VStack(alignment: .leading) {
 					TextField("Name", text: $workout.name)
-					AddRandomExerciseButton(workout: workout)
-					ExerciseList(workout: workout)
+					AddRandomExerciseButton(workout: workout, modelContext: modelContext)
+					ExerciseList(workout: workout, modelContext: modelContext)
 				}
 				.padding()
 				.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -169,7 +203,7 @@ struct WorkoutEditorV2: View {
 	
 	struct ExerciseList: View {
 		@Bindable var workout: WorkoutRecord
-		@Environment(\.modelContext) private var modelContext
+		let modelContext: ModelContext
 		
 		var body: some View {
 			ForEach(workout.orderedExercises) { exercise in
@@ -185,17 +219,21 @@ struct WorkoutEditorV2: View {
 	struct AddRandomExerciseButton: View {
 		@Query private var exercises: [Exercise]
 		@Bindable var workout: WorkoutRecord
+		let modelContext: ModelContext
+		
+		func getExerciseDetail(for exerciseId: PersistentIdentifier) -> Exercise {
+			return modelContext.model(for: exerciseId) as? Exercise ?? Exercise(name: "AUTO_GENERATED")
+		}
 		
 		var body: some View {
 			Button("Add Random Exercise") {
-				if let exerciseDetails = exercises.randomElement() {
-					if let exerciseDetails = exercises.first {
-						let record = ExerciseRecord()
-						record.details = exerciseDetails
-						workout.exercises.append(record)
-					} else {
-						print("No exercises found.  None added.")
-					}
+				if let exerciseDetails = exercises.first {
+					let record = ExerciseRecord()
+					record.details = getExerciseDetail(for: exerciseDetails.id)
+					workout.exercises.append(record)
+					print("workout.exercises.count: \(workout.exercises.count)")
+				} else {
+					print("🚨 No exercises found.  None added.")
 				}
 			}
 			.padding(.bottom)
