@@ -48,13 +48,13 @@ final class WorkoutManager {
 		do {
 			let data = try Data(contentsOf: savePath)
 			let savedPersistentIdentifier = try JSONDecoder().decode(PersistentIdentifier.self, from: data)
-			print(savedPersistentIdentifier)
 			
 			if let savedWorkout = modelContext.model(for: savedPersistentIdentifier) as? WorkoutRecord {
 				modelContext.insert(savedWorkout)
 				currentWorkout = savedWorkout
 				
 				print("Initialised current workout with saved workout")
+
 			} else {
 				print("No workout saved, won't initialise current workout.")
 			}
@@ -86,7 +86,6 @@ final class WorkoutManager {
 		Task(priority: .background) {
 			do {
 				try FileManager.default.removeItem(at: savePath)
-				print("Deleted workout.")
 			} catch {
 				print("Unable to delete saved workout file.  \(error.localizedDescription)")
 			}

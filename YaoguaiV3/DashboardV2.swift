@@ -15,13 +15,8 @@ struct DashboardV2: View {
 	@Query private var exerciseRecords: [ExerciseRecord]
 	@Query private var workoutRecords: [WorkoutRecord]
 	
-	// For new workouts (presented on main screen)
 	@Bindable var workoutManager: WorkoutManager
-	
 	@State var newWorkoutSheetShowing = false
-	
-	// For existing workouts (presented in sheet)
-	@State private var workoutBeingEdited: WorkoutRecord? = nil
 	
 	var body: some View {
 		NavigationStack {
@@ -44,19 +39,9 @@ struct DashboardV2: View {
 						workoutManager.startNewWorkout()
 						newWorkoutSheetShowing.toggle()
 					}
-						.buttonStyle(.bordered)
+					.buttonStyle(.bordered)
 					
-					ForEach(workoutRecords) { workout in
-						HStack {
-							Text(workout.name)
-							Button("Edit") {
-								workoutBeingEdited = workout
-							}
-							Button("Delete") {
-								modelContext.delete(workout)
-							}
-						}
-					}
+					WorkoutList(workoutManager: workoutManager)
 				}
 			}
 			.padding()
@@ -70,17 +55,39 @@ struct DashboardV2: View {
 				.padding()
 				.background(.bar)
 			}
-			.sheet(item: $workoutBeingEdited) { workout in
-//				WorkoutEditorV2(workout: workout)
-				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager)
-			}
 			.sheet(isPresented: $newWorkoutSheetShowing) {
 				if let workout = workoutManager.currentWorkout {
-//					WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
 					WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager, isNewWorkout: true)
 				} else {
 					Text("Loading...")
 				}
+			}
+		}
+	}
+	
+	struct WorkoutList: View {
+		@Query private var workoutRecords: [WorkoutRecord]
+		// For existing workouts (presented in sheet)
+		@State private var workoutBeingEdited: WorkoutRecord? = nil
+		@Environment(\.modelContext) private var modelContext
+		@Bindable var workoutManager: WorkoutManager
+		
+		var body: some View {
+			VStack {
+				ForEach(workoutRecords) { workout in
+					HStack {
+						Text(workout.name)
+						Button("Edit") {
+							workoutBeingEdited = workout
+						}
+						Button("Delete") {
+							modelContext.delete(workout)
+						}
+					}
+				}
+			}
+			.sheet(item: $workoutBeingEdited) { workout in
+				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager)
 			}
 		}
 	}
@@ -90,17 +97,10 @@ struct WorkoutEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
 	
 	@Bindable var workout: WorkoutRecord
-	@Bindable var workoutManager: WorkoutManager
+	let workoutManager: WorkoutManager
 	let modelContext: ModelContext
 	let isNewWorkout: Bool
 	
-	/// Since workoutId is of type PersistentIdentifier, the ID needs to belong to an object that's been inserted
-	/// into the context already, otherwise bugs will appear.
-	///
-	/// IT'S DECIDED: WE WILL ALWAYS INSERT THE MODEL BEFORE EDITING.  This also allows us to keep
-	/// track of the ID of the model so we can persist the current workout.
-	///
-	/// I just need to remove it if it's cancelled.
 	init(workoutId: PersistentIdentifier,
 		 in container: ModelContainer,
 		 workoutManager: WorkoutManager,
@@ -135,7 +135,7 @@ struct WorkoutEditorWrapper: View {
 						}
 						
 						ToolbarItem(placement: .cancellationAction) {
-							Button("Cancel") {
+							Button("Hide") {
 								dismiss()
 							}
 						}
@@ -150,6 +150,15 @@ struct WorkoutEditorWrapper: View {
 							.tint(.green)
 						}
 						
+						ToolbarItem(placement: .destructiveAction) {
+							Button("Delete") {
+								modelContext.delete(workout)
+								try? modelContext.save()
+								dismiss()
+							}
+							.tint(.red)
+						}
+						
 						ToolbarItem(placement: .cancellationAction) {
 							Button("Cancel") {
 								dismiss()
@@ -158,39 +167,6 @@ struct WorkoutEditorWrapper: View {
 					}
 				}
 		}
-		//			.toolbar {
-		//				if modelContext.autosaveEnabled {
-		//					ToolbarItem(placement: .destructiveAction) {
-		//						Button("Discard", role: .destructive) {
-		//							/// Deleting from this peer context doesn't remove the relationships... via the deleteRule
-		//							/// So need to do it explicity.  WTF.
-		//							try? modelContext.transaction {
-		//								workout.exercises.forEach { modelContext.delete($0) }
-		//								modelContext.delete(workout)
-		//								try? modelContext.save()
-		//							}
-		//							dismiss()
-		//						}
-		//						.tint(.red)
-		//					}
-		//				}
-		//
-		//				ToolbarItem(placement: .cancellationAction) {
-		//					Button(modelContext.autosaveEnabled ? "Hide" : "Discard") {
-		//						dismiss()
-		//					}
-		//				}
-		//
-		//				ToolbarItem(placement: .confirmationAction) {
-		//					Button(modelContext.autosaveEnabled ? "Complete" : "Save") {
-		//						print(workout)
-		//						modelContext.insert(workout)
-		//						try? modelContext.save()
-		//						dismiss()
-		//					}
-		//					.tint(.green)
-		//				}
-		//			}
 	}
 }
 
