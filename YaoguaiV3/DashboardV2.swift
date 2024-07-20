@@ -31,12 +31,6 @@ struct DashboardV2: View {
 						newWorkoutSheetShowing.toggle()
 					}
 					.buttonStyle(.bordered)
-					
-					Button("Cancel Workout", role: .destructive){
-						workoutManager.cancel()
-					}
-					.buttonStyle(.bordered)
-					.tint(.red)
 				} else {
 					Button("Add Dummy Exercise Details") {
 						let pullups = Exercise(name: "Pullups")
@@ -46,7 +40,7 @@ struct DashboardV2: View {
 						modelContext.insert(pushups)
 					}
 					
-					Button("Start New Workout"){
+					Button("Start New Workout") {
 						workoutManager.startNewWorkout()
 						newWorkoutSheetShowing.toggle()
 					}
@@ -80,13 +74,14 @@ struct DashboardV2: View {
 //				WorkoutEditorV2(workout: workout)
 				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager)
 			}
-//			.sheet(isPresented: $newWorkoutSheetShowing) {
-//				if let workout = workoutManager.currentWorkout {
+			.sheet(isPresented: $newWorkoutSheetShowing) {
+				if let workout = workoutManager.currentWorkout {
 //					WorkoutEditorV2(workoutId: workout.id, in: modelContext.container, autosave: true)
-//				} else {
-//					Text("Loading...")
-//				}
-//			}
+					WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager, isNewWorkout: true)
+				} else {
+					Text("Loading...")
+				}
+			}
 		}
 	}
 }
@@ -108,8 +103,8 @@ struct WorkoutEditorWrapper: View {
 	/// I just need to remove it if it's cancelled.
 	init(workoutId: PersistentIdentifier,
 		 in container: ModelContainer,
-		 isNewWorkout: Bool = false,
-		 workoutManager: WorkoutManager
+		 workoutManager: WorkoutManager,
+		 isNewWorkout: Bool = false
 	) {
 		self.modelContext = ModelContext(container)
 		self.isNewWorkout = isNewWorkout
@@ -124,8 +119,24 @@ struct WorkoutEditorWrapper: View {
 				.toolbar {
 					if isNewWorkout {
 						ToolbarItem(placement: .confirmationAction) {
-							Button("") {
-								
+							Button("Finish") {
+								workoutManager.complete()
+								dismiss()
+							}
+							.tint(.green)
+						}
+						
+						ToolbarItem(placement: .destructiveAction) {
+							Button("Discard") {
+								workoutManager.cancel()
+								dismiss()
+							}
+							.tint(.red)
+						}
+						
+						ToolbarItem(placement: .cancellationAction) {
+							Button("Cancel") {
+								dismiss()
 							}
 						}
 					} else {
@@ -139,7 +150,7 @@ struct WorkoutEditorWrapper: View {
 							.tint(.green)
 						}
 						
-						ToolbarItem(placement: .confirmationAction) {
+						ToolbarItem(placement: .cancellationAction) {
 							Button("Cancel") {
 								dismiss()
 							}
