@@ -35,7 +35,8 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			DashboardV2(workoutManager: workoutManager)
+//			DashboardV2(workoutManager: workoutManager)
+			AppSpecificKeyboardDemo()
 		}
 		.modelContainer(sharedModelContainer)
 //		.environment(workoutManager)
