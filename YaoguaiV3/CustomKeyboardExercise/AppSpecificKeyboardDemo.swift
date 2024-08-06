@@ -11,28 +11,28 @@ import SwiftUI
 
 /// Code to set the inputView property of text fields or text views to a view that should replace the system keyboard!
 struct AppSpecificKeyboardDemo: View {
-	@State private var input: String = "➤➤"
+	@State private var input: String = ""
 	@FocusState private var inputFocused
 	
 	@State private var textFieldRect: CGRect = .zero
 	private let keyboardHeight: CGFloat = 300.0
 	
+	private let cornerRadius = 6.0
+	
 	var body: some View {
-		VStack(spacing: 20) {
-			Text("input: \(input)")
-				.padding(.horizontal, 16)
-			
+		VStack {
 			WorkoutTextField(input: $input, keyboardHeight: keyboardHeight)
 				.focused($inputFocused)
 				.background(
-					RoundedRectangle(cornerRadius: 16)
-						.fill(.yellow.opacity(0.3))
+					RoundedRectangle(cornerRadius: cornerRadius)
+						.fill(.gray.opacity(0.1))
 				)
 				.overlay {
-					RoundedRectangle(cornerRadius: 16)
-						.stroke(.green, lineWidth: inputFocused ? 1.0 : 0)
+					RoundedRectangle(cornerRadius: cornerRadius)
+						.stroke(.green, lineWidth: 2.0)
+						.opacity(inputFocused ? 1 : 0)
+						.animation(.easeInOut(duration: 0.5), value: inputFocused)
 				}
-				.padding(16)
 				.overlay(content: {
 					GeometryReader { geometry in
 						DispatchQueue.main.async {
@@ -41,14 +41,9 @@ struct AppSpecificKeyboardDemo: View {
 						return Color.clear
 					}
 				})
-				.padding()
-			
 		}
-		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+		.frame(maxWidth: .infinity, alignment: .center)
 		.contentShape(Rectangle())
-		.onAppear {
-			inputFocused = true
-		}
 		.onTapGesture(coordinateSpace: .global) { location in
 			if !textFieldRect.contains(location) {
 				inputFocused = false
@@ -64,12 +59,12 @@ fileprivate struct WorkoutTextField: UIViewRepresentable {
 	var keyboardHeight: CGFloat
 	
 	func makeUIView(context: Context) -> UITextField {
-		let textField = UITextField()
+		let containerView = UIView()
 		
+		let textField = UITextField()
 		textField.text = input
-		textField.font = .systemFont(ofSize: 12)
 		textField.delegate = context.coordinator
-		textField.tintColor = UIColor.red
+		textField.textAlignment = .center
 		
 		// required so that the textfield height is not filling up the entire screen
 		textField.setContentHuggingPriority(.defaultHigh, for: .vertical)
@@ -78,6 +73,7 @@ fileprivate struct WorkoutTextField: UIViewRepresentable {
 		let AnimalKeyboardViewController = UIHostingController(
 			rootView: NumericKeyboardView(
 				insertText: { text in
+					// check if cursor isn't at end
 					textField.text = "\(textField.text ?? "")\(text)"
 				},
 				deleteText: textField.deleteBackward,
@@ -94,11 +90,24 @@ fileprivate struct WorkoutTextField: UIViewRepresentable {
 		inputView.addSubview(animalKeyboardView)
 		
 		NSLayoutConstraint.activate([
-			//			animalKeyboardView.bottomAnchor.constraint(equalTo: inputView.bottomAnchor),
 			animalKeyboardView.widthAnchor.constraint(equalToConstant: inputView.frame.width)
 		])
 		
 		textField.inputView = inputView
+		
+		// Add the button overlay
+		let button = UIButton(type: .custom)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.backgroundColor = UIColor.red.withAlphaComponent(0.3) // Make button visible
+		button.addTarget(context.coordinator, action: #selector(Coordinator.selectAllText(sender:)), for: .touchUpInside)
+		textField.addSubview(button)
+		
+		NSLayoutConstraint.activate([
+			button.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
+			button.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
+			button.topAnchor.constraint(equalTo: textField.topAnchor),
+			button.bottomAnchor.constraint(equalTo: textField.bottomAnchor)
+		])
 		
 		return textField
 	}
@@ -124,16 +133,20 @@ fileprivate extension WorkoutTextField {
 			super.init()
 		}
 		
+		// This prevents the edit menu from appearing
+		func textField(_ textField: UITextField, editMenuForCharactersIn range: NSRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
+			return UIMenu()
+		}
+		
 		func textFieldDidChangeSelection(_ textField: UITextField) {
 			guard let text = textField.text else { return }
 			parent.input = text
 		}
 		
 		func textFieldDidBeginEditing(_ textField: UITextField) {
-			DispatchQueue.main.async {
-				print("Did begin edit")
-				textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
-			}
+			//			print("Hello")
+			//			textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
+			textField.selectAll(nil)
 		}
 		
 		func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -141,5 +154,30 @@ fileprivate extension WorkoutTextField {
 			return true
 		}
 		
+		//		func textFieldDidEndEditing(_ textField: UITextField) {
+		//		}
+		
+		@objc func selectAllText(sender: UIButton) {
+			guard let textField = sender.superview as? UITextField else { return }
+			textField.selectAll(nil)
+			textField.becomeFirstResponder() // Focus the text field to bring up the keyboard
+			print("Button tapped, all text selected, and keyboard shown.")
+		}
 	}
+}
+
+#Preview {
+	VStack(spacing: 10) {
+		HStack(spacing: 10) {
+			AppSpecificKeyboardDemo()
+			AppSpecificKeyboardDemo()
+			AppSpecificKeyboardDemo()
+		}
+		HStack(spacing: 10) {
+			AppSpecificKeyboardDemo()
+			AppSpecificKeyboardDemo()
+			AppSpecificKeyboardDemo()
+		}
+	}
+	.padding()
 }

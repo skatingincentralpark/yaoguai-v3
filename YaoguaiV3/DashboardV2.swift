@@ -111,6 +111,7 @@ struct WorkoutEditorWrapper: View {
 		self.modelContext.autosaveEnabled = isNewWorkout ? true : false
 		self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
 		self.workoutManager = workoutManager
+		print("Initialising WorkoutEditorWrapper")
 	}
 	
 	var body: some View {
@@ -174,6 +175,12 @@ struct WorkoutEditorV2: View {
 	@Bindable var workout: WorkoutRecord
 	let modelContext: ModelContext
 	
+	init(workout: WorkoutRecord, modelContext: ModelContext) {
+		self.workout = workout
+		self.modelContext = modelContext
+		print("Initialising WorkoutEditorV2")
+	}
+	
 	var body: some View {
 		NavigationStack {
 			ScrollView {
@@ -230,7 +237,14 @@ struct WorkoutEditorV2: View {
 
 struct ExerciseRecordEditor: View {
 	@Bindable var exercise: ExerciseRecord
+//	@State var exercise: ExerciseRecord = ExerciseRecord()
 	var delete: () -> Void
+	
+	init(exercise: ExerciseRecord, delete: @escaping () -> Void) {
+		self.exercise = exercise
+		self.delete = delete
+		print("Initialising ExerciseRecordEditor")
+	}
 	
 	var body: some View {
 		VStack(alignment: .leading) {
