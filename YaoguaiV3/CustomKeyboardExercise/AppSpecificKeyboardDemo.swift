@@ -22,6 +22,7 @@ struct AppSpecificKeyboardDemo: View {
 	var body: some View {
 		VStack {
 			WorkoutTextField(input: $input, keyboardHeight: keyboardHeight)
+				.frame(height: 100) // Adjusted height to accommodate both text field and button
 				.focused($inputFocused)
 				.background(
 					RoundedRectangle(cornerRadius: cornerRadius)
@@ -58,7 +59,7 @@ fileprivate struct WorkoutTextField: UIViewRepresentable {
 	@Binding var input: String
 	var keyboardHeight: CGFloat
 	
-	func makeUIView(context: Context) -> UITextField {
+	func makeUIView(context: Context) -> UIView {
 		let containerView = UIView()
 		
 		let textField = UITextField()
@@ -95,27 +96,40 @@ fileprivate struct WorkoutTextField: UIViewRepresentable {
 		
 		textField.inputView = inputView
 		
-		// Add the button overlay
+		// Add the button beneath the text field
 		let button = UIButton(type: .custom)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.backgroundColor = UIColor.red.withAlphaComponent(0.3) // Make button visible
+		button.setTitle("Select All", for: .normal)
 		button.addTarget(context.coordinator, action: #selector(Coordinator.selectAllText(sender:)), for: .touchUpInside)
-		textField.addSubview(button)
 		
+		containerView.addSubview(textField)
+		containerView.addSubview(button)
+		
+	
 		NSLayoutConstraint.activate([
-			button.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
-			button.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
-			button.topAnchor.constraint(equalTo: textField.topAnchor),
-			button.bottomAnchor.constraint(equalTo: textField.bottomAnchor)
+			// Text field constraints
+			textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			textField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+			textField.topAnchor.constraint(equalTo: containerView.topAnchor),
+			
+			// Button constraints
+			button.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+			button.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+			button.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
+			button.heightAnchor.constraint(equalToConstant: 44),
+			button.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
 		])
 		
-		return textField
+		return containerView
 	}
 	
-	func updateUIView(_ uiView: UITextField, context: Context) {
-		// required so that the textfield height is not filling up the entire screen
-		uiView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-		uiView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+	func updateUIView(_ uiView: UIView, context: Context) {
+		if let textField = uiView.subviews.first(where: { $0 is UITextField }) as? UITextField {
+			textField.text = input
+			textField.setContentHuggingPriority(.defaultHigh, for: .vertical)
+			textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+		}
 	}
 }
 

@@ -18,6 +18,7 @@
 		A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */; };
 		A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F268B2C408B4600FD971E /* WorkoutManager.swift */; };
 		A14B766B2C59A1F60031AE14 /* TestViewTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B766A2C59A1F60031AE14 /* TestViewTextField.swift */; };
+		A14B766D2C62DE5D0031AE14 /* ButtonTextFieldTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B766C2C62DE5D0031AE14 /* ButtonTextFieldTest.swift */; };
 		A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17A1A362C4D005B0053215E /* NumericKeyboard.swift */; };
 		A19739352C4B2D6500356010 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19739342C4B2D6500356010 /* Array.swift */; };
 		A19739372C4B989400356010 /* AppSpecificKeyboardDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19739362C4B989400356010 /* AppSpecificKeyboardDemo.swift */; };
@@ -36,6 +37,7 @@
 		A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialFocusTextStyle.swift; sourceTree = "<group>"; };
 		A11F268B2C408B4600FD971E /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
 		A14B766A2C59A1F60031AE14 /* TestViewTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewTextField.swift; sourceTree = "<group>"; };
+		A14B766C2C62DE5D0031AE14 /* ButtonTextFieldTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTextFieldTest.swift; sourceTree = "<group>"; };
 		A17A1A362C4D005B0053215E /* NumericKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericKeyboard.swift; sourceTree = "<group>"; };
 		A19739342C4B2D6500356010 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		A19739362C4B989400356010 /* AppSpecificKeyboardDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSpecificKeyboardDemo.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				A19739362C4B989400356010 /* AppSpecificKeyboardDemo.swift */,
+				A14B766C2C62DE5D0031AE14 /* ButtonTextFieldTest.swift */,
 				A17A1A362C4D005B0053215E /* NumericKeyboard.swift */,
 			);
 			path = CustomKeyboardExercise;
@@ -176,6 +179,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */,
+				A14B766D2C62DE5D0031AE14 /* ButtonTextFieldTest.swift in Sources */,
 				A19739352C4B2D6500356010 /* Array.swift in Sources */,
 				A14B766B2C59A1F60031AE14 /* TestViewTextField.swift in Sources */,
 				A11F26742C3AA6CC00FD971E /* ContentView.swift in Sources */,

@@ -35,23 +35,16 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			ScrollView {
-				VStack(spacing: 10) {
+				VStack {
 					ForEach(0...10, id: \.self) { i in
-						HStack(spacing: 10) {
-							AppSpecificKeyboardDemo()
-							AppSpecificKeyboardDemo()
-							AppSpecificKeyboardDemo()
-						}
-						HStack(spacing: 10) {
-							AppSpecificKeyboardDemo()
-							AppSpecificKeyboardDemo()
-							AppSpecificKeyboardDemo()
+						HStack {
+							SimpleTextField(id: i + 1)
+							SimpleTextField(id: i + 2)
+							SimpleTextField(id: i + 3)
 						}
 					}
 				}
-				.padding()
-			}
+
 			
 			//			DashboardV2(workoutManager: workoutManager)
 		}
