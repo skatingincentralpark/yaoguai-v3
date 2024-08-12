@@ -297,22 +297,34 @@ struct SetRecordEditor: View {
 	
 	var body: some View {
 		HStack {
-			TextField("Value", value: $set.value, format: .number)
-				.keyboardType(.numberPad)
-				.focused($valueFocused)
-				.textFieldStyle(.specialFocus(focused: valueFocused))
+			SimpleTextField(id: set.id.hashValue)
+				.frame(height: 30)
+				.background(.gray)
+				.clipShape(RoundedRectangle(cornerRadius: 6))
+			SimpleTextField(id: set.id.hashValue)
+				.frame(height: 30)
+				.background(.gray)
+				.clipShape(RoundedRectangle(cornerRadius: 6))
+			SimpleTextField(id: set.id.hashValue)
+				.frame(height: 30)
+				.background(.gray)
+				.clipShape(RoundedRectangle(cornerRadius: 6))
 			
+//			TextField("Value", value: $set.value, format: .number)
+//				.keyboardType(.numberPad)
+//				.focused($valueFocused)
+//				.textFieldStyle(.specialFocus(focused: valueFocused))
 			
-			TextField("Reps", value: $set.reps, format: .number)
-				.keyboardType(.numberPad)
-				.focused($repsFocused)
-				.textFieldStyle(.specialFocus(focused: repsFocused))
-			
-			
-			TextField("RPE", value: $set.rpe, format: .number)
-				.keyboardType(.numberPad)
-				.focused($rpeFocused)
-				.textFieldStyle(.specialFocus(focused: rpeFocused))
+//			TextField("Reps", value: $set.reps, format: .number)
+//				.keyboardType(.numberPad)
+//				.focused($repsFocused)
+//				.textFieldStyle(.specialFocus(focused: repsFocused))
+//			
+//			
+//			TextField("RPE", value: $set.rpe, format: .number)
+//				.keyboardType(.numberPad)
+//				.focused($rpeFocused)
+//				.textFieldStyle(.specialFocus(focused: rpeFocused))
 			
 			Button(role: .destructive) {
 				delete(set)

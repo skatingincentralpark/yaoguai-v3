@@ -35,18 +35,22 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-				VStack {
-					ForEach(0...10, id: \.self) { i in
-						HStack {
-							SimpleTextField(id: i + 1)
-							SimpleTextField(id: i + 2)
-							SimpleTextField(id: i + 3)
-						}
-					}
-				}
-
+//			ScrollView {
+//				VStack(spacing: 10) {
+//					ForEach(0...10, id: \.self) { i in
+//						HStack(spacing: 10) {
+//							SimpleTextField(id: i + 1)
+//								.frame(height: 30)
+//							SimpleTextField(id: i + 2)
+//								.frame(height: 30)
+//							SimpleTextField(id: i + 3)
+//								.frame(height: 30)
+//						}
+//					}
+//				}
+//			}
 			
-			//			DashboardV2(workoutManager: workoutManager)
+			DashboardV2(workoutManager: workoutManager)
 		}
 		.modelContainer(sharedModelContainer)
 		//		.environment(workoutManager)
