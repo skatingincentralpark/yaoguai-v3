@@ -3,6 +3,7 @@ import SwiftUI
 struct NumericKeyboardView: View {
 	var insertText: (String) -> Void
 	var deleteText: () -> Void
+	var hideKeyboard: () -> Void
 	
 	let keyboardHeight: CGFloat
 	var backgroundColor: Color
@@ -43,7 +44,7 @@ struct NumericKeyboardView: View {
 			.containerRelativeFrame(.horizontal, count: 4, spacing: 0)
 			.background(.white)
 			
-			Button(action: {}, label: {
+			Button(action: hideKeyboard, label: {
 				Image(systemName: "keyboard.chevron.compact.down")
 					.frame(maxHeight: .infinity)
 					.containerRelativeFrame(.horizontal, count: 4, spacing: 0)
@@ -88,6 +89,7 @@ struct NumericKeyboardView: View {
 	NumericKeyboardView(
 		insertText: { _ in },
 		deleteText: { },
+		hideKeyboard: { },
 		keyboardHeight: 300,
 		backgroundColor: Color.gray
 	)

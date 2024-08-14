@@ -61,6 +61,8 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 		containerView.addSubview(button)
 		
 		func setupKeyboard() {
+			let inputView = UIInputView()
+			
 			let AnimalKeyboardViewController = UIHostingController(
 				rootView: NumericKeyboardView(
 					insertText: { text in
@@ -69,14 +71,14 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 						}
 					},
 					deleteText: textField.deleteBackward,
+					hideKeyboard: { textField.endEditing(true) },
 					keyboardHeight: keyboardHeight,
-					backgroundColor: .orange
+					backgroundColor: .white
 				))
 			
 			let animalKeyboardView = AnimalKeyboardViewController.view!
 			animalKeyboardView.translatesAutoresizingMaskIntoConstraints = false
 			
-			let inputView = UIInputView()
 			inputView.frame = CGRect(origin: .zero, size: CGSize(width: UIScreen.main.bounds.width, height: keyboardHeight))
 			inputView.addSubview(animalKeyboardView)
 			
