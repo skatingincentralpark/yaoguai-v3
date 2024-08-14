@@ -35,22 +35,8 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-//			ScrollView {
-//				VStack(spacing: 10) {
-//					ForEach(0...10, id: \.self) { i in
-//						HStack(spacing: 10) {
-//							SimpleTextField(id: i + 1)
-//								.frame(height: 30)
-//							SimpleTextField(id: i + 2)
-//								.frame(height: 30)
-//							SimpleTextField(id: i + 3)
-//								.frame(height: 30)
-//						}
-//					}
-//				}
-//			}
-			
-			DashboardV2(workoutManager: workoutManager)
+			ButtonTextFieldV2Preview()
+//			DashboardV2(workoutManager: workoutManager)
 		}
 		.modelContainer(sharedModelContainer)
 		//		.environment(workoutManager)
