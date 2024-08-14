@@ -64,8 +64,9 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 			let AnimalKeyboardViewController = UIHostingController(
 				rootView: NumericKeyboardView(
 					insertText: { text in
-						// check if cursor isn't at end
-						textField.text = "\(textField.text ?? "")\(text)"
+						if let selectedTextRange = textField.selectedTextRange {
+							textField.replace(selectedTextRange, withText: text)
+						}
 					},
 					deleteText: textField.deleteBackward,
 					keyboardHeight: keyboardHeight,
