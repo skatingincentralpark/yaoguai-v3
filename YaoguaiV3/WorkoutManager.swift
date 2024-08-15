@@ -40,7 +40,7 @@ final class WorkoutManager {
 	}
 	
 	func loadCurrentWorkout() {
-		// Need to early return if we're in preview otherwise I get FatalError "Failed to create a managed objectID"
+		/// Need to early return if we're in preview otherwise I get FatalError "Failed to create a managed objectID"
 		if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
 			return
 		}
@@ -94,9 +94,27 @@ final class WorkoutManager {
 	
 	@MainActor
 	func complete() {
-		if let currentWorkout {
-			modelContext.insert(currentWorkout)
+		guard let currentExercises = currentWorkout?.exercises else { return }
+		guard let currentWorkout else { return }
+		
+		/// For all exercises, filter out any sets that haven't been completed
+		currentExercises.enumerated().forEach({ idx, exercise in
+			currentExercises[idx].sets = currentExercises[idx].sets.filter({ setRecord in
+				setRecord.complete
+			})
+		})
+		
+		/// Filter out any exercises that have no sets, and don't save if no exercises remaining
+		if currentExercises.filter({ exercise in
+			!exercise.sets.isEmpty
+		}).count == 0 {
+			print("")
+			self.currentWorkoutId = nil
+			self.currentWorkout = nil
+			return
 		}
+		
+		modelContext.insert(currentWorkout)
 		
 		self.currentWorkoutId = nil
 		self.currentWorkout = nil
@@ -118,11 +136,11 @@ final class WorkoutManager {
 		let newWorkout = WorkoutRecord(name: "New Workout")
 		modelContext.insert(newWorkout)
 		
-		// Need to call save here to guarantee it's saved, otherwise, we could have an ID with no actual workout
+		/// Need to call save here to guarantee it's saved, otherwise, we could have an ID with no actual workout
 		try? modelContext.save()
 		
-		// Task is for visual bug when currentWorkout is used to display a sheet
-		// Forces code to run on next runloop, similar to process.nextTick
+		/// Task is for visual bug when currentWorkout is used to display a sheet
+		/// Forces code to run on next runloop, similar to process.nextTick
 		Task { currentWorkout = newWorkout }
 	}
 	
