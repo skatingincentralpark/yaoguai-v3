@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ButtonTextFieldTestV2: View {
 	@FocusState var focused
+	@State private var input = ""
 	
 	var body: some View {
-		SimpleTextFieldV2(id: UUID().hashValue, input: .constant(""), keyboardHeight: 300)
+		SimpleTextFieldV2(id: UUID().hashValue, input: $input, keyboardHeight: 300)
 			.focused($focused)
 			.frame(height: 30)
 			.background(.yellow)
@@ -49,6 +50,7 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 		textField.layer.cornerRadius = 8.0
 		textField.translatesAutoresizingMaskIntoConstraints = false
 		textField.tag = id
+		textField.text = input
 		
 		let button = UIButton(type: .system)
 		button.translatesAutoresizingMaskIntoConstraints = false

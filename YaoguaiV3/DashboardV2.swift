@@ -297,34 +297,65 @@ struct SetRecordEditor: View {
 	
 	var body: some View {
 		HStack {
-//			SimpleTextField(id: set.id.hashValue)
-//				.frame(height: 30)
-//				.background(.gray)
-//				.clipShape(RoundedRectangle(cornerRadius: 6))
-//			SimpleTextField(id: set.id.hashValue)
-//				.frame(height: 30)
-//				.background(.gray)
-//				.clipShape(RoundedRectangle(cornerRadius: 6))
-//			SimpleTextField(id: set.id.hashValue)
-//				.frame(height: 30)
-//				.background(.gray)
-//				.clipShape(RoundedRectangle(cornerRadius: 6))
+			SimpleTextFieldV2(
+				id: UUID().hashValue,
+				input: Binding(
+					get: {
+						set.valueString
+					},
+					set: { newValue in
+						set.value = Double(newValue)
+					}
+				),
+				keyboardHeight: 300)
+			.focused($valueFocused)
+			.frame(height: 30)
+			.background(.yellow)
+			.clipShape(RoundedRectangle(cornerRadius: 6))
+			.overlay {
+				RoundedRectangle(cornerRadius: 6)
+					.stroke(valueFocused ? .green : .gray, lineWidth: 3.0)
+			}
 			
-//			TextField("Value", value: $set.value, format: .number)
-//				.keyboardType(.numberPad)
-//				.focused($valueFocused)
-//				.textFieldStyle(.specialFocus(focused: valueFocused))
+			SimpleTextFieldV2(
+				id: UUID().hashValue,
+				input: Binding(
+					get: {
+						set.repsString
+					},
+					set: { newValue in
+						set.reps = Int(newValue)
+					}
+				),
+				keyboardHeight: 300)
+			.focused($repsFocused)
+			.frame(height: 30)
+			.background(.yellow)
+			.clipShape(RoundedRectangle(cornerRadius: 6))
+			.overlay {
+				RoundedRectangle(cornerRadius: 6)
+					.stroke(repsFocused ? .green : .gray, lineWidth: 3.0)
+			}
 			
-//			TextField("Reps", value: $set.reps, format: .number)
-//				.keyboardType(.numberPad)
-//				.focused($repsFocused)
-//				.textFieldStyle(.specialFocus(focused: repsFocused))
-//			
-//			
-//			TextField("RPE", value: $set.rpe, format: .number)
-//				.keyboardType(.numberPad)
-//				.focused($rpeFocused)
-//				.textFieldStyle(.specialFocus(focused: rpeFocused))
+			SimpleTextFieldV2(
+				id: UUID().hashValue,
+				input: Binding(
+					get: {
+						set.rpeString
+					},
+					set: { newValue in
+						set.rpe = Double(newValue)
+					}
+				),
+				keyboardHeight: 300)
+			.focused($rpeFocused)
+			.frame(height: 30)
+			.background(.yellow)
+			.clipShape(RoundedRectangle(cornerRadius: 6))
+			.overlay {
+				RoundedRectangle(cornerRadius: 6)
+					.stroke(rpeFocused ? .green : .gray, lineWidth: 3.0)
+			}
 			
 			Button(role: .destructive) {
 				delete(set)

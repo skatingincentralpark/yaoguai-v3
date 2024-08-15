@@ -23,7 +23,7 @@ struct YaoguaiV3App: App {
 		do {
 			let modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
 			//			try modelContainer.mainContext.delete(model: Exercise.self)
-			//			try modelContainer.mainContext.delete(model: ExerciseRecord.self)
+//						try modelContainer.mainContext.delete(model: ExerciseRecord.self)
 			//			try modelContainer.mainContext.delete(model: WorkoutRecord.self)
 			//				return try ModelContainer(for: schema, configurations: [modelConfiguration])
 			self.sharedModelContainer = modelContainer
@@ -35,8 +35,8 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			ButtonTextFieldV2Preview()
-//			DashboardV2(workoutManager: workoutManager)
+//			ButtonTextFieldV2Preview()
+			DashboardV2(workoutManager: workoutManager)
 		}
 		.modelContainer(sharedModelContainer)
 		//		.environment(workoutManager)
