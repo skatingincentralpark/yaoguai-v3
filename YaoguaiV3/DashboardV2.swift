@@ -20,6 +20,11 @@ struct DashboardV2: View {
 	
 	var body: some View {
 		NavigationStack {
+			Button("Delete Exercise Records", role: .destructive, action: {
+				try? modelContext.delete(model: ExerciseRecord.self)
+			})
+			.buttonStyle(.bordered)
+			.padding()
 			ScrollView {
 				if workoutManager.currentWorkout != nil {
 					Button("Continue Workout"){
@@ -111,7 +116,7 @@ struct WorkoutEditorWrapper: View {
 		self.modelContext.autosaveEnabled = isNewWorkout ? true : false
 		self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
 		self.workoutManager = workoutManager
-		print("Initialising WorkoutEditorWrapper")
+		//		print("Initialising WorkoutEditorWrapper")
 	}
 	
 	var body: some View {
@@ -153,8 +158,15 @@ struct WorkoutEditorWrapper: View {
 						
 						ToolbarItem(placement: .destructiveAction) {
 							Button("Delete") {
-								modelContext.delete(workout)
-								try? modelContext.save()
+								/// I think we have to explicitly delete the child exercises as we're in a nested context...
+								try? modelContext.transaction {
+									workout.exercises.forEach { exercise in
+										modelContext.delete(exercise)
+									}
+									
+									modelContext.delete(workout)
+								}
+								
 								dismiss()
 							}
 							.tint(.red)
@@ -178,7 +190,7 @@ struct WorkoutEditorV2: View {
 	init(workout: WorkoutRecord, modelContext: ModelContext) {
 		self.workout = workout
 		self.modelContext = modelContext
-		print("Initialising WorkoutEditorV2")
+		//		print("Initialising WorkoutEditorV2")
 	}
 	
 	var body: some View {
@@ -237,13 +249,12 @@ struct WorkoutEditorV2: View {
 
 struct ExerciseRecordEditor: View {
 	@Bindable var exercise: ExerciseRecord
-//	@State var exercise: ExerciseRecord = ExerciseRecord()
 	var delete: () -> Void
 	
 	init(exercise: ExerciseRecord, delete: @escaping () -> Void) {
 		self.exercise = exercise
 		self.delete = delete
-		print("Initialising ExerciseRecordEditor")
+		//		print("Initialising ExerciseRecordEditor")
 	}
 	
 	var body: some View {
