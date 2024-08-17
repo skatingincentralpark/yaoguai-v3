@@ -104,17 +104,24 @@ final class WorkoutManager {
 			})
 		})
 		
-		/// Filter out any exercises that have no sets, and don't save if no exercises remaining
-		if currentExercises.filter({ exercise in
-			!exercise.sets.isEmpty
-		}).count == 0 {
-			print("")
-			self.currentWorkoutId = nil
-			self.currentWorkout = nil
-			return
+		/// Remember, transaction saves at the end of the closure
+		try? modelContext.transaction {
+			currentExercises.enumerated().forEach { idx, exercise in
+				if exercise.sets.isEmpty {
+					print("🗑️ Deleting an exercise record because it's empty.")
+					modelContext.delete(exercise)
+				}
+			}
 		}
 		
-		modelContext.insert(currentWorkout)
+		/// Here we DON'T use currentExercises to check, as it's a constant.  We use the original array.
+		/// Items will be auto removed when deleted from the context.
+		print("Remaining exercise records: \(currentWorkout.exercises.count)")
+		
+		/// If there's 0 exercises remaining, don't save the workout
+		if currentWorkout.exercises.count == 0 {
+			modelContext.delete(currentWorkout)
+		}
 		
 		self.currentWorkoutId = nil
 		self.currentWorkout = nil
