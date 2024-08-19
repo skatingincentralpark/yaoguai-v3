@@ -31,10 +31,10 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			Dashboard(workoutManager: workoutManager)
+			Dashboard()
 		}
 		.modelContainer(sharedModelContainer)
-		//		.environment(workoutManager)
+		.environment(workoutManager)
 	}
 }
 

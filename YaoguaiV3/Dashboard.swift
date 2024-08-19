@@ -10,12 +10,11 @@ import SwiftData
 
 struct Dashboard: View {
 	@Environment(\.modelContext) private var modelContext
+	@Environment(WorkoutManager.self) private var workoutManager
 	
 	@Query private var exercises: [Exercise]
 	@Query private var exerciseRecords: [ExerciseRecord]
 	@Query private var workoutRecords: [WorkoutRecord]
-	
-	@Bindable var workoutManager: WorkoutManager
 	@State var newWorkoutSheetShowing = false
 	
 	var body: some View {
@@ -46,7 +45,7 @@ struct Dashboard: View {
 					}
 					.buttonStyle(.bordered)
 					
-					WorkoutList(workoutManager: workoutManager)
+					WorkoutList()
 				}
 			}
 			.padding()
@@ -62,7 +61,7 @@ struct Dashboard: View {
 			}
 			.sheet(isPresented: $newWorkoutSheetShowing) {
 				if let workout = workoutManager.currentWorkout {
-					WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager, isNewWorkout: true)
+					WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, isNewWorkout: true)
 				} else {
 					Text("Loading...")
 				}
@@ -72,10 +71,9 @@ struct Dashboard: View {
 	
 	struct WorkoutList: View {
 		@Query private var workoutRecords: [WorkoutRecord]
-		// For existing workouts (presented in sheet)
 		@State private var workoutBeingEdited: WorkoutRecord? = nil
 		@Environment(\.modelContext) private var modelContext
-		@Bindable var workoutManager: WorkoutManager
+		@Environment(WorkoutManager.self) private var workoutManager
 		
 		var body: some View {
 			VStack {
@@ -92,7 +90,7 @@ struct Dashboard: View {
 				}
 			}
 			.sheet(item: $workoutBeingEdited) { workout in
-				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, workoutManager: workoutManager)
+				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container)
 			}
 		}
 	}
@@ -100,23 +98,20 @@ struct Dashboard: View {
 
 struct WorkoutEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
+	@Environment(WorkoutManager.self) private var workoutManager
 	
 	@Bindable var workout: WorkoutRecord
-	let workoutManager: WorkoutManager
 	let modelContext: ModelContext
 	let isNewWorkout: Bool
 	
 	init(workoutId: PersistentIdentifier,
 		 in container: ModelContainer,
-		 workoutManager: WorkoutManager,
 		 isNewWorkout: Bool = false
 	) {
 		self.modelContext = ModelContext(container)
 		self.isNewWorkout = isNewWorkout
 		self.modelContext.autosaveEnabled = isNewWorkout ? true : false
 		self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
-		self.workoutManager = workoutManager
-		//		print("Initialising WorkoutEditorWrapper")
 	}
 	
 	var body: some View {
@@ -415,8 +410,9 @@ struct SetRecordEditor: View {
 		
 		let workoutManager = WorkoutManager(modelContext: modelContainer.mainContext)
 		
-		return Dashboard(workoutManager: workoutManager)
+		return Dashboard()
 			.modelContainer(modelContainer)
+			.environment(workoutManager)
 	} catch {
 		return Text("Problem bulding ModelContainer.")
 	}
