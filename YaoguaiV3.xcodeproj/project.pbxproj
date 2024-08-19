@@ -8,15 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26712C3AA6CC00FD971E /* YaoguaiV3App.swift */; };
-		A11F26742C3AA6CC00FD971E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26732C3AA6CC00FD971E /* ContentView.swift */; };
 		A11F26782C3AA6CE00FD971E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A11F26772C3AA6CE00FD971E /* Assets.xcassets */; };
 		A11F267B2C3AA6CE00FD971E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A11F267A2C3AA6CE00FD971E /* Preview Assets.xcassets */; };
 		A11F26822C3AA80000FD971E /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26812C3AA80000FD971E /* Record.swift */; };
-		A11F26842C3AB18D00FD971E /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26832C3AB18D00FD971E /* Dashboard.swift */; };
-		A11F26882C3E90D500FD971E /* DashboardV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26872C3E90D500FD971E /* DashboardV2.swift */; };
+		A11F26882C3E90D500FD971E /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26872C3E90D500FD971E /* Dashboard.swift */; };
 		A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */; };
 		A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F268B2C408B4600FD971E /* WorkoutManager.swift */; };
-		A14B766B2C59A1F60031AE14 /* TestViewTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B766A2C59A1F60031AE14 /* TestViewTextField.swift */; };
 		A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17A1A362C4D005B0053215E /* NumericKeyboard.swift */; };
 		A1802BFC2C6AC49700272B66 /* ButtonTextFIeldV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802BFB2C6AC49700272B66 /* ButtonTextFIeldV2.swift */; };
 		A19739352C4B2D6500356010 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19739342C4B2D6500356010 /* Array.swift */; };
@@ -25,15 +22,12 @@
 /* Begin PBXFileReference section */
 		A11F266E2C3AA6CC00FD971E /* YaoguaiV3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YaoguaiV3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11F26712C3AA6CC00FD971E /* YaoguaiV3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaoguaiV3App.swift; sourceTree = "<group>"; };
-		A11F26732C3AA6CC00FD971E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A11F26772C3AA6CE00FD971E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A11F267A2C3AA6CE00FD971E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A11F26812C3AA80000FD971E /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
-		A11F26832C3AB18D00FD971E /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
-		A11F26872C3E90D500FD971E /* DashboardV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardV2.swift; sourceTree = "<group>"; };
+		A11F26872C3E90D500FD971E /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialFocusTextStyle.swift; sourceTree = "<group>"; };
 		A11F268B2C408B4600FD971E /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
-		A14B766A2C59A1F60031AE14 /* TestViewTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewTextField.swift; sourceTree = "<group>"; };
 		A17A1A362C4D005B0053215E /* NumericKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericKeyboard.swift; sourceTree = "<group>"; };
 		A1802BFB2C6AC49700272B66 /* ButtonTextFIeldV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTextFIeldV2.swift; sourceTree = "<group>"; };
 		A19739342C4B2D6500356010 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
@@ -69,17 +63,13 @@
 		A11F26702C3AA6CC00FD971E /* YaoguaiV3 */ = {
 			isa = PBXGroup;
 			children = (
-				A11F26712C3AA6CC00FD971E /* YaoguaiV3App.swift */,
-				A11F26732C3AA6CC00FD971E /* ContentView.swift */,
-				A11F26832C3AB18D00FD971E /* Dashboard.swift */,
-				A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */,
-				A11F26872C3E90D500FD971E /* DashboardV2.swift */,
-				A19739382C4B997100356010 /* CustomKeyboardExercise */,
-				A19739342C4B2D6500356010 /* Array.swift */,
-				A11F268B2C408B4600FD971E /* WorkoutManager.swift */,
-				A11F26812C3AA80000FD971E /* Record.swift */,
-				A14B766A2C59A1F60031AE14 /* TestViewTextField.swift */,
 				A11F26772C3AA6CE00FD971E /* Assets.xcassets */,
+				A11F26712C3AA6CC00FD971E /* YaoguaiV3App.swift */,
+				A11F26872C3E90D500FD971E /* Dashboard.swift */,
+				A19739382C4B997100356010 /* CustomKeyboardExercise */,
+				A1802C222C7400C200272B66 /* Extensions */,
+				A1802C232C7400F300272B66 /* Utility */,
+				A1802C242C74010100272B66 /* Models */,
 				A11F26792C3AA6CE00FD971E /* Preview Content */,
 			);
 			path = YaoguaiV3;
@@ -91,6 +81,31 @@
 				A11F267A2C3AA6CE00FD971E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A1802C222C7400C200272B66 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A19739342C4B2D6500356010 /* Array.swift */,
+				A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A1802C232C7400F300272B66 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				A11F268B2C408B4600FD971E /* WorkoutManager.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		A1802C242C74010100272B66 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A11F26812C3AA80000FD971E /* Record.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A19739382C4B997100356010 /* CustomKeyboardExercise */ = {
@@ -174,11 +189,8 @@
 			files = (
 				A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */,
 				A19739352C4B2D6500356010 /* Array.swift in Sources */,
-				A14B766B2C59A1F60031AE14 /* TestViewTextField.swift in Sources */,
-				A11F26742C3AA6CC00FD971E /* ContentView.swift in Sources */,
 				A11F26822C3AA80000FD971E /* Record.swift in Sources */,
-				A11F26842C3AB18D00FD971E /* Dashboard.swift in Sources */,
-				A11F26882C3E90D500FD971E /* DashboardV2.swift in Sources */,
+				A11F26882C3E90D500FD971E /* Dashboard.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
 				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,
 				A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */,
