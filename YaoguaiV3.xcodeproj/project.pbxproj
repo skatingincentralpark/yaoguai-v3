@@ -15,7 +15,11 @@
 		A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */; };
 		A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F268B2C408B4600FD971E /* WorkoutManager.swift */; };
 		A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17A1A362C4D005B0053215E /* NumericKeyboard.swift */; };
-		A1802BFC2C6AC49700272B66 /* ButtonTextFIeldV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802BFB2C6AC49700272B66 /* ButtonTextFIeldV2.swift */; };
+		A1802BFC2C6AC49700272B66 /* WorkoutTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802BFB2C6AC49700272B66 /* WorkoutTextField.swift */; };
+		A1802C282C7547C700272B66 /* SetRecordEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C272C7547C700272B66 /* SetRecordEditor.swift */; };
+		A1802C2A2C7547DF00272B66 /* ExerciseRecordEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C292C7547DF00272B66 /* ExerciseRecordEditor.swift */; };
+		A1802C2E2C7547FA00272B66 /* WorkoutEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C2D2C7547FA00272B66 /* WorkoutEditor.swift */; };
+		A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C302C75485700272B66 /* WorkoutEditorWrapper.swift */; };
 		A19739352C4B2D6500356010 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19739342C4B2D6500356010 /* Array.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +33,11 @@
 		A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialFocusTextStyle.swift; sourceTree = "<group>"; };
 		A11F268B2C408B4600FD971E /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
 		A17A1A362C4D005B0053215E /* NumericKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericKeyboard.swift; sourceTree = "<group>"; };
-		A1802BFB2C6AC49700272B66 /* ButtonTextFIeldV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTextFIeldV2.swift; sourceTree = "<group>"; };
+		A1802BFB2C6AC49700272B66 /* WorkoutTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTextField.swift; sourceTree = "<group>"; };
+		A1802C272C7547C700272B66 /* SetRecordEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRecordEditor.swift; sourceTree = "<group>"; };
+		A1802C292C7547DF00272B66 /* ExerciseRecordEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRecordEditor.swift; sourceTree = "<group>"; };
+		A1802C2D2C7547FA00272B66 /* WorkoutEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditor.swift; sourceTree = "<group>"; };
+		A1802C302C75485700272B66 /* WorkoutEditorWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditorWrapper.swift; sourceTree = "<group>"; };
 		A19739342C4B2D6500356010 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,8 +73,7 @@
 			children = (
 				A11F26772C3AA6CE00FD971E /* Assets.xcassets */,
 				A11F26712C3AA6CC00FD971E /* YaoguaiV3App.swift */,
-				A11F26872C3E90D500FD971E /* Dashboard.swift */,
-				A19739382C4B997100356010 /* CustomKeyboardExercise */,
+				A1802C252C75479200272B66 /* Views */,
 				A1802C222C7400C200272B66 /* Extensions */,
 				A1802C232C7400F300272B66 /* Utility */,
 				A1802C242C74010100272B66 /* Models */,
@@ -108,13 +115,34 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		A19739382C4B997100356010 /* CustomKeyboardExercise */ = {
+		A1802C252C75479200272B66 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A1802BFB2C6AC49700272B66 /* ButtonTextFIeldV2.swift */,
+				A1802C262C7547A000272B66 /* Workout */,
+				A19739382C4B997100356010 /* WorkoutTextField */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A1802C262C7547A000272B66 /* Workout */ = {
+			isa = PBXGroup;
+			children = (
+				A11F26872C3E90D500FD971E /* Dashboard.swift */,
+				A1802C2D2C7547FA00272B66 /* WorkoutEditor.swift */,
+				A1802C302C75485700272B66 /* WorkoutEditorWrapper.swift */,
+				A1802C292C7547DF00272B66 /* ExerciseRecordEditor.swift */,
+				A1802C272C7547C700272B66 /* SetRecordEditor.swift */,
+			);
+			path = Workout;
+			sourceTree = "<group>";
+		};
+		A19739382C4B997100356010 /* WorkoutTextField */ = {
+			isa = PBXGroup;
+			children = (
+				A1802BFB2C6AC49700272B66 /* WorkoutTextField.swift */,
 				A17A1A362C4D005B0053215E /* NumericKeyboard.swift */,
 			);
-			path = CustomKeyboardExercise;
+			path = WorkoutTextField;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,12 +217,16 @@
 			files = (
 				A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */,
 				A19739352C4B2D6500356010 /* Array.swift in Sources */,
+				A1802C2E2C7547FA00272B66 /* WorkoutEditor.swift in Sources */,
 				A11F26822C3AA80000FD971E /* Record.swift in Sources */,
 				A11F26882C3E90D500FD971E /* Dashboard.swift in Sources */,
+				A1802C282C7547C700272B66 /* SetRecordEditor.swift in Sources */,
+				A1802C2A2C7547DF00272B66 /* ExerciseRecordEditor.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
+				A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */,
 				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,
 				A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */,
-				A1802BFC2C6AC49700272B66 /* ButtonTextFIeldV2.swift in Sources */,
+				A1802BFC2C6AC49700272B66 /* WorkoutTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

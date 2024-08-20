@@ -1,5 +1,5 @@
 //
-//  ButtonTextFIeldV2.swift
+//  WorkoutTextField.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 13/8/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ButtonTextFieldTestV2: View {
+struct WorkoutTextField: View {
 	@FocusState var focused
 	@State private var input = ""
 	
@@ -138,9 +138,9 @@ struct ButtonTextFieldV2Preview: View {
 			VStack(spacing: 10) {
 				ForEach(0...10, id: \.self) { i in
 					HStack(spacing: 10) {
-						ButtonTextFieldTestV2()
-						ButtonTextFieldTestV2()
-						ButtonTextFieldTestV2()
+						WorkoutTextField()
+						WorkoutTextField()
+						WorkoutTextField()
 					}
 				}
 			}
