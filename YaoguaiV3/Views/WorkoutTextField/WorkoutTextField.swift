@@ -51,6 +51,7 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 		textField.translatesAutoresizingMaskIntoConstraints = false
 		textField.tag = id
 		textField.text = input
+		textField.delegate = context.coordinator
 		
 		let button = UIButton(type: .system)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -111,14 +112,24 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 	}
 	
 	func updateUIView(_ uiView: UIView, context: Context) {
-		// No update needed
+		if let textField = uiView.subviews.first(where: { $0 is UITextField && $0.tag == id }) as? UITextField {
+			if textField.text != input {
+				textField.text = input
+			}
+		}
 	}
 	
 	func makeCoordinator() -> Coordinator {
-		Coordinator()
+		Coordinator(input: $input)
 	}
 	
-	class Coordinator: NSObject {
+	class Coordinator: NSObject, UITextFieldDelegate {
+		@Binding var input: String
+		
+		init(input: Binding<String>) {
+			self._input = input
+		}
+		
 		@objc func buttonTapped(_ sender: UIButton) {
 			guard let containerView = sender.superview,
 				  let textField = containerView.subviews.first(where: { $0 is UITextField && $0.tag == sender.tag }) as? UITextField else {
@@ -128,6 +139,10 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 			// Focuses and selects all
 			textField.becomeFirstResponder()
 			textField.selectAll(nil)
+		}
+		
+		func textFieldDidChangeSelection(_ textField: UITextField) {
+			input = textField.text ?? ""
 		}
 	}
 }
