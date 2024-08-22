@@ -45,6 +45,10 @@ final class WorkoutManager {
 			return
 		}
 		
+		if NSClassFromString("XCTest") != nil {
+			return
+		}
+		
 		do {
 			let data = try Data(contentsOf: savePath)
 			let savedPersistentIdentifier = try JSONDecoder().decode(PersistentIdentifier.self, from: data)
@@ -146,9 +150,9 @@ final class WorkoutManager {
 		/// Need to call save here to guarantee it's saved, otherwise, we could have an ID with no actual workout
 		try? modelContext.save()
 		
-		/// Task is for visual bug when currentWorkout is used to display a sheet
+		/// Before I needed a Task is for visual bug when currentWorkout is used to display a sheet
 		/// Forces code to run on next runloop, similar to process.nextTick
-		Task { currentWorkout = newWorkout }
+		currentWorkout = newWorkout
 	}
 	
 }

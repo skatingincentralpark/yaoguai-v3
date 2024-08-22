@@ -11,26 +11,20 @@ import SwiftData
 struct WorkoutEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(WorkoutManager.self) private var workoutManager
-	
-	@Bindable var workout: WorkoutRecord
-	let modelContext: ModelContext
-	let isNewWorkout: Bool
+	@State private var viewModel: ViewModel
 	
 	init(workoutId: PersistentIdentifier,
 		 in container: ModelContainer,
 		 isNewWorkout: Bool = false
 	) {
-		self.modelContext = ModelContext(container)
-		self.isNewWorkout = isNewWorkout
-		self.modelContext.autosaveEnabled = isNewWorkout ? true : false
-		self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
+		self.viewModel = ViewModel(workoutId: workoutId, in: container, isNewWorkout: isNewWorkout)
 	}
 	
 	var body: some View {
 		NavigationStack {
-			WorkoutEditor(workout: workout, modelContext: modelContext)
+			WorkoutEditor(workout: viewModel.workout, modelContext: viewModel.modelContext)
 				.toolbar {
-					if isNewWorkout {
+					if viewModel.isNewWorkout {
 						ToolbarItem(placement: .confirmationAction) {
 							Button("Finish") {
 								workoutManager.complete()
@@ -55,9 +49,7 @@ struct WorkoutEditorWrapper: View {
 					} else {
 						ToolbarItem(placement: .confirmationAction) {
 							Button("Save") {
-								if modelContext.hasChanges {
-									try? modelContext.save()
-								}
+								viewModel.saveExistingWorkout()
 								dismiss()
 							}
 							.tint(.green)
@@ -65,15 +57,7 @@ struct WorkoutEditorWrapper: View {
 						
 						ToolbarItem(placement: .destructiveAction) {
 							Button("Delete") {
-								/// I think we have to explicitly delete the child exercises as we're in a nested context...
-								try? modelContext.transaction {
-									workout.exercises.forEach { exercise in
-										modelContext.delete(exercise)
-									}
-									
-									modelContext.delete(workout)
-								}
-								
+								viewModel.deleteExistingWorkout()
 								dismiss()
 							}
 							.tint(.red)
@@ -86,6 +70,42 @@ struct WorkoutEditorWrapper: View {
 						}
 					}
 				}
+		}
+	}
+}
+
+extension WorkoutEditorWrapper {
+	@Observable
+	class ViewModel {
+		var workout: WorkoutRecord
+		let modelContext: ModelContext
+		let isNewWorkout: Bool
+		
+		init(workoutId: PersistentIdentifier,
+			 in container: ModelContainer,
+			 isNewWorkout: Bool = false
+		) {
+			self.modelContext = ModelContext(container)
+			self.modelContext.autosaveEnabled = isNewWorkout ? true : false
+			self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
+			self.isNewWorkout = isNewWorkout
+		}
+		
+		func saveExistingWorkout() {
+			if modelContext.hasChanges {
+				try? modelContext.save()
+			}
+		}
+		
+		func deleteExistingWorkout() {
+			/// I think we have to explicitly delete the child exercises as we're in a nested context...
+			try? modelContext.transaction {
+				workout.exercises.forEach { exercise in
+					modelContext.delete(exercise)
+				}
+				
+				modelContext.delete(workout)
+			}
 		}
 	}
 }

@@ -12,7 +12,6 @@ struct Dashboard: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(WorkoutManager.self) private var workoutManager
 	
-
 	@State var newWorkoutSheetShowing = false
 	
 	var body: some View {
