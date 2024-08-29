@@ -32,6 +32,17 @@ struct ExerciseRecordEditor: View {
 				exercise.sets.append(SetRecord())
 			}
 			
+			Button("Get Last Exercise Record") {
+				print("==========")
+				if let latest = exercise.details?.latestRecord {
+					print("value: \(latest.sets.first?.valueString)")
+					print("reps: \(latest.sets.first?.repsString)")
+					print("rpe: \(latest.sets.first?.rpeString)")
+				} else {
+					print("Nil!")
+				}
+			}
+			
 			if exercise.sets.count > 0 {
 				HStack {
 					VStack {

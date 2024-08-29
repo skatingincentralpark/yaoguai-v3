@@ -58,7 +58,7 @@ struct WorkoutEditor: View {
 		
 		var body: some View {
 			Button("Add Random Exercise") {
-				if let exerciseDetails = exercises.first {
+				if let exerciseDetails = exercises.randomElement() {
 					let record = ExerciseRecord()
 					record.details = getExerciseDetail(for: exerciseDetails.id)
 					workout.exercises.append(record)

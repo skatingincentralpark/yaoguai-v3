@@ -127,6 +127,11 @@ final class WorkoutManager {
 			modelContext.delete(currentWorkout)
 		}
 		
+		/// Update the latest exercise records
+		currentWorkout.exercises.forEach { record in
+			record.details?.latestRecord = record
+		}
+		
 		self.currentWorkoutId = nil
 		self.currentWorkout = nil
 		

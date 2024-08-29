@@ -11,12 +11,17 @@ import SwiftData
 @Model final class Exercise {
 	@Attribute(.unique) var name: String
 	
+	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.details)
+	var records: [ExerciseRecord] = []
+
+	var latestRecord: ExerciseRecord?
+	
 	init(name: String) {
 		self.name = name
 	}
 }
 
-struct SetRecord: Identifiable, Codable, Equatable  {
+struct SetRecord: Identifiable, Codable, Equatable {
 	var id = UUID()
 	var value: Double?
 	var reps: Int?
@@ -49,7 +54,7 @@ struct SetRecord: Identifiable, Codable, Equatable  {
 }
 	
 @Model final class ExerciseRecord {
-	let timestamp: Date = Date()
+	let created: Date = Date()
 	var workout: WorkoutRecord?
 	var details: Exercise?
 	var sets: [SetRecord] = []
@@ -59,6 +64,7 @@ struct SetRecord: Identifiable, Codable, Equatable  {
 
 @Model final class WorkoutRecord {
 	var name: String
+	var created: Date = Date()
 	
 	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.workout)
 	var exercises: [ExerciseRecord] = []
@@ -68,7 +74,7 @@ struct SetRecord: Identifiable, Codable, Equatable  {
 			exercises = newExercises
 		}
 		get {
-			exercises.sorted(by: { $0.timestamp < $1.timestamp })
+			exercises.sorted(by: { $0.created < $1.created })
 		}
 	}
 	
