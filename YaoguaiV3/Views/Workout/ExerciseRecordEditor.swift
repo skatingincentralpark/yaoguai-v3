@@ -25,29 +25,18 @@ struct ExerciseRecordEditor: View {
 					.padding(.horizontal)
 					.background(.bar)
 				Text(exercise.details?.name ?? "")
-				Button("Delete", action: delete)
-			}
-			
-			Button("Add Set") {
-				exercise.sets.append(SetRecord())
-			}
-			
-			Button("Get Last Exercise Record") {
-				print("==========")
-				if let latest = exercise.details?.latestRecord {
-					print("value: \(latest.sets.first?.valueString)")
-					print("reps: \(latest.sets.first?.repsString)")
-					print("rpe: \(latest.sets.first?.rpeString)")
-				} else {
-					print("Nil!")
+				Button("Delete", role: .destructive, action: delete)
+				Spacer()
+				Button("Add Set") {
+					exercise.sets.append(SetRecord())
 				}
 			}
 			
 			if exercise.sets.count > 0 {
 				HStack {
 					VStack {
-						ForEach($exercise.sets) { set in
-							SetRecordEditor(set: set, delete: { _ in
+						ForEach(Array($exercise.sets.enumerated()), id: \.1.id) { index, set in
+							SetRecordEditor(set: set, exercise: exercise.details, index: index, delete: { _ in
 								if let index = exercise.sets.firstIndex(where: { $0 == set.wrappedValue }) {
 									exercise.sets.remove(at: index)
 								}

@@ -21,7 +21,8 @@
 		A1802C2E2C7547FA00272B66 /* WorkoutEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C2D2C7547FA00272B66 /* WorkoutEditor.swift */; };
 		A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C302C75485700272B66 /* WorkoutEditorWrapper.swift */; };
 		A1802C3B2C76A1F800272B66 /* YaoguaiV3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C3A2C76A1F800272B66 /* YaoguaiV3Tests.swift */; };
-		A1802C422C7AC35A00272B66 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C412C7AC35A00272B66 /* Protocols.swift */; };
+		A1802C462C829DB500272B66 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C452C829DB500272B66 /* Collection.swift */; };
+		A1802C482C82ADD400272B66 /* MyTestUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C472C82ADD400272B66 /* MyTestUITextField.swift */; };
 		A19739352C4B2D6500356010 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19739342C4B2D6500356010 /* Array.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +53,8 @@
 		A1802C302C75485700272B66 /* WorkoutEditorWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutEditorWrapper.swift; sourceTree = "<group>"; };
 		A1802C382C76A1F800272B66 /* YaoguaiV3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YaoguaiV3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1802C3A2C76A1F800272B66 /* YaoguaiV3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaoguaiV3Tests.swift; sourceTree = "<group>"; };
-		A1802C412C7AC35A00272B66 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		A1802C452C829DB500272B66 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		A1802C472C82ADD400272B66 /* MyTestUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTestUITextField.swift; sourceTree = "<group>"; };
 		A19739342C4B2D6500356010 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				A19739342C4B2D6500356010 /* Array.swift */,
+				A1802C452C829DB500272B66 /* Collection.swift */,
 				A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */,
 			);
 			path = Extensions;
@@ -135,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				A11F26812C3AA80000FD971E /* Record.swift */,
-				A1802C412C7AC35A00272B66 /* Protocols.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -145,6 +147,7 @@
 			children = (
 				A1802C262C7547A000272B66 /* Workout */,
 				A19739382C4B997100356010 /* WorkoutTextField */,
+				A1802C472C82ADD400272B66 /* MyTestUITextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -284,10 +287,11 @@
 				A11F26822C3AA80000FD971E /* Record.swift in Sources */,
 				A11F26882C3E90D500FD971E /* Dashboard.swift in Sources */,
 				A1802C282C7547C700272B66 /* SetRecordEditor.swift in Sources */,
+				A1802C462C829DB500272B66 /* Collection.swift in Sources */,
 				A1802C2A2C7547DF00272B66 /* ExerciseRecordEditor.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
+				A1802C482C82ADD400272B66 /* MyTestUITextField.swift in Sources */,
 				A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */,
-				A1802C422C7AC35A00272B66 /* Protocols.swift in Sources */,
 				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,
 				A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */,
 				A1802BFC2C6AC49700272B66 /* WorkoutTextField.swift in Sources */,
