@@ -9,10 +9,10 @@ import SwiftUI
 
 struct WorkoutTextField: View {
 	@FocusState var focused
-	@State private var input = ""
+	@State private var input: Int? = 1
 	
 	var body: some View {
-		SimpleTextFieldV2(id: UUID().hashValue, input: $input, keyboardHeight: 300)
+		SimpleTextFieldV2(value: $input, id: UUID().hashValue, keyboardHeight: 300)
 			.focused($focused)
 			.frame(height: 30)
 			.background(.yellow)
@@ -40,9 +40,9 @@ class PaddedTextField: UITextField {
 	}
 }
 
-struct SimpleTextFieldV2: UIViewRepresentable {
+struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStringConvertible {
+	@Binding var value: V?
 	var id: Int
-	@Binding var input: String
 	var keyboardHeight: CGFloat
 	
 	func makeUIView(context: Context) -> UIView {
@@ -50,7 +50,6 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 		textField.layer.cornerRadius = 8.0
 		textField.translatesAutoresizingMaskIntoConstraints = false
 		textField.tag = id
-		textField.text = input
 		textField.delegate = context.coordinator
 		
 		let button = UIButton(type: .system)
@@ -68,9 +67,18 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 			
 			let AnimalKeyboardViewController = UIHostingController(
 				rootView: NumericKeyboardView(
-					insertText: { text in
+					insertText: { newText in
+						if let value {
+							if value is Int {
+								print("Is int")
+								return
+							}
+						}
 						if let selectedTextRange = textField.selectedTextRange {
-							textField.replace(selectedTextRange, withText: text)
+							textField.replace(selectedTextRange, withText: newText)
+							if let textFieldText = textField.text {
+								value = V(textFieldText)
+							}
 						}
 					},
 					deleteText: textField.deleteBackward,
@@ -111,23 +119,24 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 		return containerView
 	}
 	
+	/// Updates the state of the specified view with new information from SwiftUI.
 	func updateUIView(_ uiView: UIView, context: Context) {
-		if let textField = uiView.subviews.first(where: { $0 is UITextField && $0.tag == id }) as? UITextField {
-			if textField.text != input {
-				textField.text = input
+		if let textField = uiView.subviews.first(where: { $0 is UITextField }) as? UITextField {
+			if let value {
+				textField.text = String(value)
 			}
 		}
 	}
 	
 	func makeCoordinator() -> Coordinator {
-		Coordinator(input: $input)
+		Coordinator(value: $value)
 	}
 	
 	class Coordinator: NSObject, UITextFieldDelegate {
-		@Binding var input: String
+		var value: Binding<V?>
 		
-		init(input: Binding<String>) {
-			self._input = input
+		init(value: Binding<V?>) {
+			self.value = value
 		}
 		
 		@objc func buttonTapped(_ sender: UIButton) {
@@ -136,13 +145,32 @@ struct SimpleTextFieldV2: UIViewRepresentable {
 					  return
 				  }
 			
-			// Focuses and selects all
+			/// Focuses and selects all
 			textField.becomeFirstResponder()
 			textField.selectAll(nil)
 		}
 		
-		func textFieldDidChangeSelection(_ textField: UITextField) {
-			input = textField.text ?? ""
+		/// This delegate method is called when the user types or deletes characters in the UITextField.
+		/// It attempts to convert the updated string (newValue) to the numeric type V.
+		func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+			let text = textField.text as NSString?
+			let newValue = text?.replacingCharacters(in: range, with: string)
+			
+			if let number = V(newValue ?? "0") {
+				self.value.wrappedValue = number
+				return true
+			} else {
+				if nil == newValue || newValue!.isEmpty {
+					self.value.wrappedValue = 0
+				}
+				return false
+			}
+		}
+		
+		func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+			if reason == .committed {
+				textField.resignFirstResponder()
+			}
 		}
 	}
 }

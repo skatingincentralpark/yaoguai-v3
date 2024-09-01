@@ -45,22 +45,11 @@ struct SetRecordEditor: View {
 				}
 			})
 			
-//			Text("\(set.valueString) kg")
-			TextField("Enter your score", value: $set.value, format: .number)
-				.textFieldStyle(.roundedBorder)
-				.padding()
+			Text("reps: \(set.value)")
 			
 			SimpleTextFieldV2(
+				value: $set.value,
 				id: UUID().hashValue,
-				input: Binding(
-					get: {
-						set.valueString
-					},
-					set: { newValue in
-						print(newValue)
-						set.value = Double(newValue)
-					}
-				),
 				keyboardHeight: 300)
 			.focused($valueFocused)
 			.frame(height: 30)
@@ -71,19 +60,14 @@ struct SetRecordEditor: View {
 					.stroke(valueFocused ? .green : .gray, lineWidth: 3.0)
 			}
 			
+			Text("reps: \(set.reps)")
+			
 			SimpleTextFieldV2(
+				value: $set.reps,
 				id: UUID().hashValue,
-				input: Binding(
-					get: {
-						set.repsString
-					},
-					set: { newValue in
-						set.reps = Int(newValue)
-					}
-				),
 				keyboardHeight: 300)
 			.focused($repsFocused)
-			.frame(height: 30)
+			.frame(width: 70, height: 30)
 			.background(.yellow)
 			.clipShape(RoundedRectangle(cornerRadius: 6))
 			.overlay {
