@@ -29,6 +29,10 @@ struct SetRecordEditor: View {
 	
 	var body: some View {
 		HStack {
+			Text("reps: \(set.value)")
+			Text("reps: \(set.reps)")
+		}
+		HStack {
 			Button(action: {
 				if let previousSet {
 					set.reps = previousSet.reps
@@ -45,8 +49,6 @@ struct SetRecordEditor: View {
 				}
 			})
 			
-			Text("reps: \(set.value)")
-			
 			SimpleTextFieldV2(
 				value: $set.value,
 				id: UUID().hashValue,
@@ -59,8 +61,6 @@ struct SetRecordEditor: View {
 				RoundedRectangle(cornerRadius: 6)
 					.stroke(valueFocused ? .green : .gray, lineWidth: 3.0)
 			}
-			
-			Text("reps: \(set.reps)")
 			
 			SimpleTextFieldV2(
 				value: $set.reps,

@@ -68,16 +68,14 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 			let AnimalKeyboardViewController = UIHostingController(
 				rootView: NumericKeyboardView(
 					insertText: { newText in
-						if let value {
-							if value is Int {
-								print("Is int")
-								return
-							}
-						}
 						if let selectedTextRange = textField.selectedTextRange {
 							textField.replace(selectedTextRange, withText: newText)
 							if let textFieldText = textField.text {
-								value = V(textFieldText)
+								// Manually trigger validation here
+								if context.coordinator.textField(textField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: newText) {
+									// Update value only if valid
+									value = V(textFieldText)
+								}
 							}
 						}
 					},
@@ -98,6 +96,7 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 			])
 			
 			textField.inputView = inputView
+			//			textField.inputView = UIPickerView()
 		}
 		
 		setupKeyboard()
@@ -142,8 +141,8 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 		@objc func buttonTapped(_ sender: UIButton) {
 			guard let containerView = sender.superview,
 				  let textField = containerView.subviews.first(where: { $0 is UITextField && $0.tag == sender.tag }) as? UITextField else {
-					  return
-				  }
+				return
+			}
 			
 			/// Focuses and selects all
 			textField.becomeFirstResponder()
@@ -152,10 +151,10 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 		
 		/// This delegate method is called when the user types or deletes characters in the UITextField.
 		/// It attempts to convert the updated string (newValue) to the numeric type V.
+		/// It ensures that the SwiftUI binding of `value` is updated
 		func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 			let text = textField.text as NSString?
 			let newValue = text?.replacingCharacters(in: range, with: string)
-			
 			if let number = V(newValue ?? "0") {
 				self.value.wrappedValue = number
 				return true

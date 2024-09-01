@@ -22,7 +22,6 @@
 		A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C302C75485700272B66 /* WorkoutEditorWrapper.swift */; };
 		A1802C3B2C76A1F800272B66 /* YaoguaiV3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C3A2C76A1F800272B66 /* YaoguaiV3Tests.swift */; };
 		A1802C462C829DB500272B66 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C452C829DB500272B66 /* Collection.swift */; };
-		A1802C482C82ADD400272B66 /* MyTestUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C472C82ADD400272B66 /* MyTestUITextField.swift */; };
 		A19739352C4B2D6500356010 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19739342C4B2D6500356010 /* Array.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,7 +53,6 @@
 		A1802C382C76A1F800272B66 /* YaoguaiV3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YaoguaiV3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1802C3A2C76A1F800272B66 /* YaoguaiV3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaoguaiV3Tests.swift; sourceTree = "<group>"; };
 		A1802C452C829DB500272B66 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
-		A1802C472C82ADD400272B66 /* MyTestUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTestUITextField.swift; sourceTree = "<group>"; };
 		A19739342C4B2D6500356010 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,7 +145,6 @@
 			children = (
 				A1802C262C7547A000272B66 /* Workout */,
 				A19739382C4B997100356010 /* WorkoutTextField */,
-				A1802C472C82ADD400272B66 /* MyTestUITextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -290,7 +287,6 @@
 				A1802C462C829DB500272B66 /* Collection.swift in Sources */,
 				A1802C2A2C7547DF00272B66 /* ExerciseRecordEditor.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
-				A1802C482C82ADD400272B66 /* MyTestUITextField.swift in Sources */,
 				A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */,
 				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,
 				A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */,
