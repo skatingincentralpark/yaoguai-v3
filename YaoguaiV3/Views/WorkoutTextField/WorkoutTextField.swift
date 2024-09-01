@@ -70,6 +70,7 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 					insertText: { newText in
 						if let selectedTextRange = textField.selectedTextRange {
 							textField.replace(selectedTextRange, withText: newText)
+							
 							if let textFieldText = textField.text {
 								// Manually trigger validation here
 								if context.coordinator.textField(textField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: newText) {
@@ -78,6 +79,7 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 								}
 							}
 						}
+						
 					},
 					deleteText: textField.deleteBackward,
 					hideKeyboard: { textField.endEditing(true) },
@@ -120,9 +122,24 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 	
 	/// Updates the state of the specified view with new information from SwiftUI.
 	func updateUIView(_ uiView: UIView, context: Context) {
+		//		if let textField = uiView.subviews.first(where: { $0 is UITextField }) as? UITextField {
+		//			if let value {
+		//				textField.text = String(value)
+		//			}
+		//		}
 		if let textField = uiView.subviews.first(where: { $0 is UITextField }) as? UITextField {
-			if let value {
-				textField.text = String(value)
+			if let value = value {
+				// Convert the value to a Double
+				let doubleValue = Double(String(value)) ?? 0.0
+				
+				// Check if the value is a whole number
+				if doubleValue == floor(doubleValue) {
+					// If it's a whole number, remove the decimal part
+					textField.text = String(Int(doubleValue))
+				} else {
+					// Otherwise, show the full number with decimal part
+					textField.text = String(value)
+				}
 			}
 		}
 	}
@@ -171,6 +188,7 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 				textField.resignFirstResponder()
 			}
 		}
+		
 	}
 }
 
