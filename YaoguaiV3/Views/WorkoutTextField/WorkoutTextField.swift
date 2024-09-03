@@ -69,19 +69,43 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 				rootView: NumericKeyboardView(
 					insertText: { newText in
 						if let selectedTextRange = textField.selectedTextRange {
-							textField.replace(selectedTextRange, withText: newText)
-							
-							if let textFieldText = textField.text {
-								// Manually trigger validation here
-								if context.coordinator.textField(textField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: newText) {
-									// Update value only if valid
-									value = V(textFieldText)
+							var currentText = textField.text ?? ""
+							var valueIsDouble = V("1") is Double
+
+							if valueIsDouble {
+								if newText == "." {
+									if currentText.contains(".") && !textField.isAllTextSelected {
+										return
+									}
+									textField.replace(selectedTextRange, withText: newText)
+								} else {
+									textField.replace(selectedTextRange, withText: newText)
+									if let updatedText = textField.text {
+										value = V(updatedText)
+									}
+								}
+							} else {
+								if newText == "." {
+									return
+								}
+								textField.replace(selectedTextRange, withText: newText)
+								if let updatedText = textField.text {
+									value = V(updatedText)
 								}
 							}
 						}
-						
 					},
-					deleteText: textField.deleteBackward,
+					deleteText: {
+						textField.deleteBackward()
+						
+						if let newText = textField.text {
+							textField.text = newText
+							
+							if let textFieldText = textField.text {
+								value = V(textFieldText)
+							}
+						}
+					},
 					hideKeyboard: { textField.endEditing(true) },
 					keyboardHeight: keyboardHeight,
 					backgroundColor: .white

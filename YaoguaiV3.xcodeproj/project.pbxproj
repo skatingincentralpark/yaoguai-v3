@@ -15,6 +15,7 @@
 		A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */; };
 		A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F268B2C408B4600FD971E /* WorkoutManager.swift */; };
 		A14A11FF2C84892F00D47B9F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14A11FE2C84892F00D47B9F /* Test.swift */; };
+		A14A12012C87231600D47B9F /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14A12002C87231600D47B9F /* UITextField.swift */; };
 		A17A1A372C4D005B0053215E /* NumericKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17A1A362C4D005B0053215E /* NumericKeyboard.swift */; };
 		A1802BFC2C6AC49700272B66 /* WorkoutTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802BFB2C6AC49700272B66 /* WorkoutTextField.swift */; };
 		A1802C282C7547C700272B66 /* SetRecordEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1802C272C7547C700272B66 /* SetRecordEditor.swift */; };
@@ -46,6 +47,7 @@
 		A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialFocusTextStyle.swift; sourceTree = "<group>"; };
 		A11F268B2C408B4600FD971E /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
 		A14A11FE2C84892F00D47B9F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		A14A12002C87231600D47B9F /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		A17A1A362C4D005B0053215E /* NumericKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericKeyboard.swift; sourceTree = "<group>"; };
 		A1802BFB2C6AC49700272B66 /* WorkoutTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTextField.swift; sourceTree = "<group>"; };
 		A1802C272C7547C700272B66 /* SetRecordEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRecordEditor.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				A19739342C4B2D6500356010 /* Array.swift */,
+				A14A12002C87231600D47B9F /* UITextField.swift */,
 				A1802C452C829DB500272B66 /* Collection.swift */,
 				A11F26892C3FFC4700FD971E /* SpecialFocusTextStyle.swift */,
 			);
@@ -292,6 +295,7 @@
 				A1802C2A2C7547DF00272B66 /* ExerciseRecordEditor.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
 				A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */,
+				A14A12012C87231600D47B9F /* UITextField.swift in Sources */,
 				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,
 				A11F26722C3AA6CC00FD971E /* YaoguaiV3App.swift in Sources */,
 				A1802BFC2C6AC49700272B66 /* WorkoutTextField.swift in Sources */,
