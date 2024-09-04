@@ -23,9 +23,29 @@ import SwiftData
 
 struct SetRecord: Identifiable, Codable, Equatable {
 	var id = UUID()
-	var value: Double?
-	var reps: Int?
-	var rpe: Double?
+	
+	var value: Double? {
+		didSet {
+			if value == nil {
+				_complete = false
+			}
+		}
+	}
+	var reps: Int? {
+		didSet {
+			if reps == nil {
+				_complete = false
+			}
+		}
+	}
+	var rpe: Double? {
+		didSet {
+			if rpe == nil {
+				_complete = false
+			}
+		}
+	}
+	
 	private var _complete = false
 	
 	var complete: Bool {
@@ -33,7 +53,9 @@ struct SetRecord: Identifiable, Codable, Equatable {
 			_complete
 		}
 		set {
-			_complete = newValue
+			if value != nil && reps != nil {
+				_complete = newValue
+			}
 		}
 	}
 	
