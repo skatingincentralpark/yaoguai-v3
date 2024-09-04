@@ -29,8 +29,8 @@ struct SetRecordEditor: View {
 	
 	var body: some View {
 		HStack {
-			Text("reps: \(set.value)")
-			Text("reps: \(set.reps)")
+			Text("value: \(set.valueString)")
+			Text("reps: \(set.repsString)")
 		}
 		HStack {
 			Button(action: {
@@ -74,26 +74,6 @@ struct SetRecordEditor: View {
 				RoundedRectangle(cornerRadius: 6)
 					.stroke(repsFocused ? .green : .gray, lineWidth: 3.0)
 			}
-			
-			//			SimpleTextFieldV2(
-			//				id: UUID().hashValue,
-			//				input: Binding(
-			//					get: {
-			//						set.rpeString
-			//					},
-			//					set: { newValue in
-			//						set.rpe = Double(newValue)
-			//					}
-			//				),
-			//				keyboardHeight: 300)
-			//			.focused($rpeFocused)
-			//			.frame(height: 30)
-			//			.background(.yellow)
-			//			.clipShape(RoundedRectangle(cornerRadius: 6))
-			//			.overlay {
-			//				RoundedRectangle(cornerRadius: 6)
-			//					.stroke(rpeFocused ? .green : .gray, lineWidth: 3.0)
-			//			}
 			
 			Button(role: .destructive) {
 				delete(set)
