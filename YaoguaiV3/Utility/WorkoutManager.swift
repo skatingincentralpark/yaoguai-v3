@@ -13,7 +13,7 @@ import Observation
 @Observable
 final class WorkoutManager {
 	var modelContext: ModelContext
-	private var currentWorkoutId: PersistentIdentifier? {
+	var currentWorkoutId: PersistentIdentifier? {
 		didSet {
 			save()
 		}
@@ -39,20 +39,20 @@ final class WorkoutManager {
 		loadCurrentWorkout()
 	}
 	
+	@MainActor
 	func loadCurrentWorkout() {
 		/// Need to early return if we're in preview otherwise I get FatalError "Failed to create a managed objectID"
 		if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
 			return
 		}
 		
-		if NSClassFromString("XCTest") != nil {
-			return
-		}
-		
 		do {
+			guard FileManager.default.fileExists(atPath: savePath.path) else {
+				return
+			}
 			let data = try Data(contentsOf: savePath)
 			let savedPersistentIdentifier = try JSONDecoder().decode(PersistentIdentifier.self, from: data)
-			
+
 			if let savedWorkout = modelContext.model(for: savedPersistentIdentifier) as? WorkoutRecord {
 				modelContext.insert(savedWorkout)
 				currentWorkout = savedWorkout
@@ -68,7 +68,7 @@ final class WorkoutManager {
 	}
 	
 	private func save() {
-		Task(priority: .background) {
+		if let currentWorkoutId {
 			do {
 				let data = try JSONEncoder().encode(currentWorkoutId)
 				try data.write(to: savePath, options: [.atomic, .completeFileProtection])
@@ -81,18 +81,23 @@ final class WorkoutManager {
 	@MainActor
 	func cancel() {
 		if let currentWorkout {
-			modelContext.delete(currentWorkout)
+			try? modelContext.transaction {
+				modelContext.delete(currentWorkout)
+				
+				// Although these will be cascade deleted, it won't happen immediately, XCTest assertions fail
+				currentWorkout.exercises.forEach { record in
+					modelContext.delete(record)
+				}
+			}
 		}
 		
 		self.currentWorkoutId = nil
 		self.currentWorkout = nil
 		
-		Task(priority: .background) {
-			do {
-				try FileManager.default.removeItem(at: savePath)
-			} catch {
-				print("Unable to delete saved workout file.  \(error.localizedDescription)")
-			}
+		do {
+			try FileManager.default.removeItem(at: savePath)
+		} catch {
+			print("Unable to delete saved workout file.  \(error.localizedDescription)")
 		}
 	}
 	
@@ -135,13 +140,12 @@ final class WorkoutManager {
 		self.currentWorkoutId = nil
 		self.currentWorkout = nil
 		
-		Task(priority: .background) {
-			do {
-				try FileManager.default.removeItem(at: savePath)
-				print("Removed workoutId from documents.")
-			} catch {
-				print("Unable to delete saved workout file.  \(error.localizedDescription)")
-			}
+		
+		do {
+			try FileManager.default.removeItem(at: savePath)
+			print("Removed workoutId from documents.")
+		} catch {
+			print("Unable to delete saved workout file.  \(error.localizedDescription)")
 		}
 	}
 	
