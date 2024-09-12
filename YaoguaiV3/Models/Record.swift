@@ -8,22 +8,8 @@
 import Foundation
 import SwiftData
 
-@Model final class Exercise {
-	@Attribute(.unique) var name: String
-	
-	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.details)
-	var records: [ExerciseRecord] = []
-
-	var latestRecord: ExerciseRecord?
-	
-	init(name: String) {
-		self.name = name
-	}
-}
-
-struct SetRecord: Identifiable, Codable, Equatable {
+struct SetRecord: SetCommon {
 	var id = UUID()
-	
 	var value: Double? {
 		didSet {
 			if value == nil {
@@ -58,47 +44,23 @@ struct SetRecord: Identifiable, Codable, Equatable {
 			}
 		}
 	}
-	
-	var valueString: String {
-		guard let value = value else { return "" }
-		return String(value)
-	}
-	
-	var rpeString: String {
-		guard let rpe = rpe else { return "" }
-		return String(rpe)
-	}
-	
-	var repsString: String {
-		guard let reps = reps else { return "" }
-		return String(reps)
-	}
 }
 	
-@Model final class ExerciseRecord {
-	let created: Date = Date()
-	var workout: WorkoutRecord?
+@Model final class ExerciseRecord: ExerciseCommon {
+	var created: Date = Date()
 	var details: Exercise?
+	var workout: WorkoutRecord?
 	var sets: [SetRecord] = []
 	
 	init() {}
 }
 
-@Model final class WorkoutRecord {
+@Model final class WorkoutRecord: WorkoutCommon {
 	var name: String
 	var created: Date = Date()
 	
 	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.workout)
 	var exercises: [ExerciseRecord] = []
-	
-	public var orderedExercises: [ExerciseRecord] {
-		set(newExercises) {
-			exercises = newExercises
-		}
-		get {
-			exercises.sorted(by: { $0.created < $1.created })
-		}
-	}
 	
 	init(name: String = "") {
 		self.name = name
