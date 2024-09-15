@@ -8,37 +8,36 @@
 import SwiftUI
 import SwiftData
 
-struct WorkoutEditor: View {
-	@Bindable var workout: WorkoutRecord
+struct WorkoutEditor<T: WorkoutCommon>: View {
+	@Bindable var workout: T
 	let modelContext: ModelContext
 	
-	init(workout: WorkoutRecord, modelContext: ModelContext) {
+	init(workout: T, modelContext: ModelContext) {
 		self.workout = workout
 		self.modelContext = modelContext
 		//		print("Initialising WorkoutEditor")
 	}
 	
 	var body: some View {
-		NavigationStack {
-			ScrollView {
-				VStack(alignment: .leading) {
-					TextField("Name", text: $workout.name)
-					AddRandomExerciseButton(workout: workout, modelContext: modelContext)
-					ExerciseList(workout: workout, modelContext: modelContext)
-				}
-				.padding()
-				.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+		ScrollView {
+			VStack(alignment: .leading) {
+				TextField("Name", text: $workout.name)
+				AddRandomExerciseButton(workout: workout, modelContext: modelContext)
+				ExerciseList(workout: workout, modelContext: modelContext)
 			}
+			.padding()
+			.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 		}
 	}
 	
 	struct ExerciseList: View {
-		@Bindable var workout: WorkoutRecord
+		@Bindable var workout: T
 		let modelContext: ModelContext
 		
 		var body: some View {
 			ForEach(workout.orderedExercises) { exercise in
-				ExerciseRecordEditor(exercise: exercise, delete: {
+				ExerciseEditor(exercise: exercise, delete: {
+					
 					workout.exercises.removeFirst { $0 == exercise }
 					modelContext.delete(exercise)
 				})
@@ -49,7 +48,7 @@ struct WorkoutEditor: View {
 	
 	struct AddRandomExerciseButton: View {
 		@Query private var exercises: [Exercise]
-		@Bindable var workout: WorkoutRecord
+		@Bindable var workout: T
 		let modelContext: ModelContext
 		
 		func getExerciseDetail(for exerciseId: PersistentIdentifier) -> Exercise {
@@ -58,14 +57,9 @@ struct WorkoutEditor: View {
 		
 		var body: some View {
 			Button("Add Random Exercise") {
-				if let exerciseDetails = exercises.randomElement() {
-					let record = ExerciseRecord()
-					record.details = getExerciseDetail(for: exerciseDetails.id)
-					workout.exercises.append(record)
-					print("workout.exercises.count: \(workout.exercises.count)")
-				} else {
-					print("🚨 No exercises found.  None added.")
-				}
+				guard let exerciseDetails = exercises.randomElement() else { return }
+				workout.addExercise(with: getExerciseDetail(for: exerciseDetails.id))
+				print("workout.exercises.count: \(workout.exercises.count)")
 			}
 			.padding(.bottom)
 		}

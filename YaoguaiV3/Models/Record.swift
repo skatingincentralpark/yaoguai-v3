@@ -34,6 +34,16 @@ struct SetRecord: SetCommon {
 	
 	private var _complete = false
 	
+	var isValid: Bool {
+		return value != nil && reps != nil
+	}
+	
+	mutating func toggleComplete() {
+		if isValid {
+			complete.toggle()
+		}
+	}
+	
 	var complete: Bool {
 		get {
 			_complete
@@ -45,6 +55,7 @@ struct SetRecord: SetCommon {
 		}
 	}
 }
+
 	
 @Model final class ExerciseRecord: ExerciseCommon {
 	var created: Date = Date()
@@ -53,16 +64,27 @@ struct SetRecord: SetCommon {
 	var sets: [SetRecord] = []
 	
 	init() {}
+	
+	func addSet() {
+		sets.append(SetRecord())
+	}
 }
 
 @Model final class WorkoutRecord: WorkoutCommon {
-	var name: String
+	var name: String = ""
 	var created: Date = Date()
 	
 	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.workout)
 	var exercises: [ExerciseRecord] = []
 	
-	init(name: String = "") {
+	init() {}
+	init(name: String) {
 		self.name = name
+	}
+	
+	func addExercise(with details: Exercise) {
+		let record = ExerciseRecord()
+		record.details = details
+		exercises.append(record)
 	}
 }

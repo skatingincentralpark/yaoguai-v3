@@ -6,13 +6,19 @@
 //
 
 import Foundation
+import Observation
+import SwiftData
 
-protocol WorkoutCommon {
+protocol WorkoutCommon: Observable, AnyObject, Identifiable, PersistentModel {
 	associatedtype ExerciseType: ExerciseCommon
 	
 	var name: String { get set }
 	var created: Date { get set }
 	var exercises: [ExerciseType] { get set }
+	
+	init()
+	
+	func addExercise(with details: Exercise)
 }
 
 extension WorkoutCommon {
@@ -21,7 +27,7 @@ extension WorkoutCommon {
 	}
 }
 
-protocol ExerciseCommon {
+protocol ExerciseCommon: Observable, AnyObject, Identifiable, PersistentModel {
 	associatedtype WorkoutType: WorkoutCommon
 	associatedtype SetType: SetCommon
 	
@@ -29,6 +35,8 @@ protocol ExerciseCommon {
 	var details: Exercise? { get set }
 	var workout: (WorkoutType)? { get set }
 	var sets: [SetType] { get set }
+	
+	func addSet()
 }
 
 protocol SetCommon: Identifiable, Codable, Equatable {

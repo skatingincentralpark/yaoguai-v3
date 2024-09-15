@@ -1,5 +1,5 @@
 //
-//  ExerciseRecordEditor.swift
+//  ExerciseEditor.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 21/8/2024.
@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-struct ExerciseRecordEditor: View {
-	@Bindable var exercise: ExerciseRecord
+struct ExerciseEditor<T: ExerciseCommon>: View {
+	@Bindable var exercise: T
 	var delete: () -> Void
 	
-	init(exercise: ExerciseRecord, delete: @escaping () -> Void) {
+	init(exercise: T, delete: @escaping () -> Void) {
 		self.exercise = exercise
 		self.delete = delete
-		//		print("Initialising ExerciseRecordEditor")
 	}
 	
 	var body: some View {
@@ -28,7 +27,7 @@ struct ExerciseRecordEditor: View {
 				Button("Delete", role: .destructive, action: delete)
 				Spacer()
 				Button("Add Set") {
-					exercise.sets.append(SetRecord())
+					exercise.addSet()
 				}
 			}
 			
@@ -36,7 +35,7 @@ struct ExerciseRecordEditor: View {
 				HStack {
 					VStack {
 						ForEach(Array($exercise.sets.enumerated()), id: \.1.id) { index, set in
-							SetRecordEditor(set: set, exercise: exercise.details, index: index, delete: { _ in
+							SetEditor(set: set, exercise: exercise.details, index: index, delete: { _ in
 								if let index = exercise.sets.firstIndex(where: { $0 == set.wrappedValue }) {
 									exercise.sets.remove(at: index)
 								}

@@ -14,8 +14,6 @@ struct SetTemplate: SetCommon {
 	var value: Double?
 	var reps: Int?
 	var rpe: Double?
-	
-	init() {}
 }
 
 @Model final class ExerciseTemplate: ExerciseCommon {
@@ -25,6 +23,10 @@ struct SetTemplate: SetCommon {
 	var sets: [SetTemplate] = []
 
 	init() {}
+	
+	func addSet() {
+		sets.append(SetTemplate())
+	}
 }
 
 @Model final class WorkoutTemplate: WorkoutCommon {
@@ -35,4 +37,10 @@ struct SetTemplate: SetCommon {
 	var exercises: [ExerciseTemplate] = []
 	
 	init() {}
+	
+	func addExercise(with details: Exercise) {
+		let template = ExerciseTemplate()
+		template.details = details
+		exercises.append(template)
+	}
 }

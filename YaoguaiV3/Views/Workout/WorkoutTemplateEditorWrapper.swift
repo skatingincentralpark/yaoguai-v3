@@ -1,5 +1,5 @@
 //
-//  WorkoutEditorWrapper.swift
+//  WorkoutTemplateEditorWrapper.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 21/8/2024.
@@ -8,9 +8,8 @@
 import SwiftUI
 import SwiftData
 
-struct WorkoutEditorWrapper: View {
+struct WorkoutTemplateEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
-	@Environment(WorkoutManager.self) private var workoutManager
 	@State private var viewModel: ViewModel
 	
 	init(workoutId: PersistentIdentifier,
@@ -21,23 +20,23 @@ struct WorkoutEditorWrapper: View {
 	}
 	
 	var body: some View {
-		NavigationStack {
-			WorkoutEditor(workout: viewModel.workout, modelContext: viewModel.modelContext)
-				.toolbar {
-					if viewModel.isNewWorkout {
-						newWorkoutToolbar()
-					} else {
-						existingWorkoutToolbar()
-					}
+	WorkoutEditor(workout: viewModel.workout, modelContext: viewModel.modelContext)
+			.onDisappear {
+				if viewModel.isNewWorkout && !viewModel.modelContext.hasChanges {
+					viewModel.modelContext.delete(viewModel.workout)
+					try? viewModel.modelContext.save()
 				}
-		}
+			}
+			.toolbar {
+				toolbarContent()
+			}
 	}
 	
 	@ToolbarContentBuilder @MainActor
-	func newWorkoutToolbar() -> some ToolbarContent {
+	func toolbarContent() -> some ToolbarContent {
 		ToolbarItem(placement: .confirmationAction) {
 			Button("Finish") {
-				workoutManager.complete()
+				viewModel.saveWorkout()
 				dismiss()
 			}
 			.tint(.green)
@@ -45,7 +44,7 @@ struct WorkoutEditorWrapper: View {
 		
 		ToolbarItem(placement: .destructiveAction) {
 			Button("Discard") {
-				workoutManager.cancel()
+				viewModel.deleteWorkout()
 				dismiss()
 			}
 			.tint(.red)
@@ -57,37 +56,12 @@ struct WorkoutEditorWrapper: View {
 			}
 		}
 	}
-	
-	@ToolbarContentBuilder @MainActor
-	func existingWorkoutToolbar() -> some ToolbarContent {
-		ToolbarItem(placement: .confirmationAction) {
-			Button("Save") {
-				viewModel.saveExistingWorkout()
-				dismiss()
-			}
-			.tint(.green)
-		}
-		
-		ToolbarItem(placement: .destructiveAction) {
-			Button("Delete") {
-				viewModel.deleteExistingWorkout()
-				dismiss()
-			}
-			.tint(.red)
-		}
-		
-		ToolbarItem(placement: .cancellationAction) {
-			Button("Cancel") {
-				dismiss()
-			}
-		}
-	}
 }
 
-extension WorkoutEditorWrapper {
+extension WorkoutTemplateEditorWrapper {
 	@Observable
 	class ViewModel {
-		var workout: WorkoutRecord
+		var workout: WorkoutTemplate
 		let modelContext: ModelContext
 		let isNewWorkout: Bool
 		
@@ -96,18 +70,20 @@ extension WorkoutEditorWrapper {
 			 isNewWorkout: Bool = false
 		) {
 			self.modelContext = ModelContext(container)
-			self.modelContext.autosaveEnabled = isNewWorkout ? true : false
-			self.workout = modelContext.model(for: workoutId) as? WorkoutRecord ?? WorkoutRecord()
+			self.modelContext.autosaveEnabled = false
+			self.workout = modelContext.model(for: workoutId) as? WorkoutTemplate ?? WorkoutTemplate()
 			self.isNewWorkout = isNewWorkout
 		}
 		
-		func saveExistingWorkout() {
+		func saveWorkout() {
+			print("Saving Workout...")
 			if modelContext.hasChanges {
+				print("Actually saving...")
 				try? modelContext.save()
 			}
 		}
 		
-		func deleteExistingWorkout() {
+		func deleteWorkout() {
 			/// I think we have to explicitly delete the child exercises as we're in a nested context...
 			try? modelContext.transaction {
 				workout.exercises.forEach { exercise in
