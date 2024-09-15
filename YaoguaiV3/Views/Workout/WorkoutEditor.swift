@@ -37,8 +37,7 @@ struct WorkoutEditor<T: WorkoutCommon>: View {
 		var body: some View {
 			ForEach(workout.orderedExercises) { exercise in
 				ExerciseEditor(exercise: exercise, delete: {
-					
-					workout.exercises.removeFirst { $0 == exercise }
+					workout.removeExercise(exercise)
 					modelContext.delete(exercise)
 				})
 				.padding(.bottom)

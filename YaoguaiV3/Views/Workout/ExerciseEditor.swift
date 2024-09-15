@@ -36,9 +36,7 @@ struct ExerciseEditor<T: ExerciseCommon>: View {
 					VStack {
 						ForEach(Array($exercise.sets.enumerated()), id: \.1.id) { index, set in
 							SetEditor(set: set, exercise: exercise.details, index: index, delete: { _ in
-								if let index = exercise.sets.firstIndex(where: { $0 == set.wrappedValue }) {
-									exercise.sets.remove(at: index)
-								}
+								exercise.removeSet(set.wrappedValue)
 							})
 							.padding(.leading)
 						}

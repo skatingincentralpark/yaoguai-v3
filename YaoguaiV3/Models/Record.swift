@@ -55,7 +55,6 @@ struct SetRecord: SetCommon {
 		}
 	}
 }
-
 	
 @Model final class ExerciseRecord: ExerciseCommon {
 	var created: Date = Date()
@@ -64,27 +63,17 @@ struct SetRecord: SetCommon {
 	var sets: [SetRecord] = []
 	
 	init() {}
-	
-	func addSet() {
-		sets.append(SetRecord())
-	}
 }
 
 @Model final class WorkoutRecord: WorkoutCommon {
 	var name: String = ""
 	var created: Date = Date()
-	
 	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.workout)
 	var exercises: [ExerciseRecord] = []
 	
 	init() {}
+	
 	init(name: String) {
 		self.name = name
-	}
-	
-	func addExercise(with details: Exercise) {
-		let record = ExerciseRecord()
-		record.details = details
-		exercises.append(record)
 	}
 }
