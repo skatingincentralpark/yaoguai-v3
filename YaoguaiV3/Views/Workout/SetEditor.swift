@@ -115,3 +115,21 @@ struct CompleteToggleView: View {
 		.tint(completeBinding ? .green : .black)
 	}
 }
+
+#Preview(traits: .sizeThatFitsLayout) {
+	do {
+		let (container, _) = try setupPreview()
+		
+		let workout = getWorkoutRecord(container.mainContext)
+		
+		container.mainContext.insert(workout)
+		
+		let exercise = workout.exercises[0]
+		
+		return SetEditor(set: .constant(exercise.sets[0]), exercise: exercise.details, index: 0, delete: {_ in })
+			.modelContainer(container)
+	}  catch {
+		return Text("Failed to build preview")
+	}
+}
+

@@ -53,3 +53,18 @@ struct ExerciseEditor<T: ExerciseCommon>: View {
 		}
 	}
 }
+
+#Preview(traits: .sizeThatFitsLayout) {
+	do {
+		let (container, _) = try setupPreview()
+		
+		let workout = getWorkoutRecord(container.mainContext)
+		
+		container.mainContext.insert(workout)
+		
+		return ExerciseEditor(exercise: workout.exercises[0], delete: {})
+			.modelContainer(container)
+	}  catch {
+		return Text("Failed to build preview")
+	}
+}

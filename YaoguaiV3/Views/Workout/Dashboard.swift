@@ -108,36 +108,12 @@ struct Dashboard: View {
 
 #Preview {
 	do {
-		let modelContainer: ModelContainer
-		modelContainer = try ModelContainer(for: WorkoutRecord.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-		
-		let pullups = Exercise(name: "Pullups")
-		let pushups = Exercise(name: "Pushups")
-		
-		modelContainer.mainContext.insert(pullups)
-		modelContainer.mainContext.insert(pushups)
-		
-		@MainActor
-		func addWorkoutRecord() {
-			let record1 = WorkoutRecord(name: "Upper")
-			let exercise1 = ExerciseRecord()
-			let exercise2 = ExerciseRecord()
-			modelContainer.mainContext.insert(exercise1)
-			modelContainer.mainContext.insert(exercise2)
-			exercise1.details = pullups
-			exercise2.details = pushups
-			record1.exercises = [exercise1, exercise2]
-			modelContainer.mainContext.insert(record1)
-		}
-		
-		addWorkoutRecord()
-		
-		let workoutManager = WorkoutManager(modelContext: modelContainer.mainContext)
+		let (container, workoutManager) = try setupPreview()
 		
 		return Dashboard()
-			.modelContainer(modelContainer)
+			.modelContainer(container)
 			.environment(workoutManager)
 	} catch {
-		return Text("Problem bulding ModelContainer.")
+		return Text("Failed to build preview")
 	}
 }
