@@ -14,23 +14,23 @@ struct SetRecord: SetCommon {
 	
 	// Properties for weighted exercises
 	var value: Measurement<UnitMass>? {
-		didSet { checkCompletion(value) }
+		didSet { toggleCompleteOffIfInvalid(value) }
 	}
 	var reps: Int? {
-		didSet { checkCompletion(reps) }
+		didSet { toggleCompleteOffIfInvalid(reps) }
 	}
 	var rpe: Double? {
-		didSet { checkCompletion(rpe) }
+		didSet { toggleCompleteOffIfInvalid(rpe) }
 	}
 	
 	// Properties for duration-based exercises
 	var duration: TimeInterval? {
-		didSet { checkCompletion(duration) }
+		didSet { toggleCompleteOffIfInvalid(duration) }
 	}
 	
 	// Properties for cardio/distance-based exercises
 	var distance: Measurement<UnitLength>? {
-		didSet { checkCompletion(distance) }
+		didSet { toggleCompleteOffIfInvalid(distance) }
 	}
 	
 	private var _complete = false
@@ -68,7 +68,7 @@ struct SetRecord: SetCommon {
 	}
 	
 	// Generic function to check if a value is non-nil
-	private mutating func checkCompletion<T>(_ field: T?) {
+	private mutating func toggleCompleteOffIfInvalid<T>(_ field: T?) {
 		if field == nil {
 			_complete = false
 		}
