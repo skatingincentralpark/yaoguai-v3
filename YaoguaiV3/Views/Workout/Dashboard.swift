@@ -55,8 +55,8 @@ struct Dashboard: View {
 	}
 	
 	func addDummyExercises() {
-		let pullups = Exercise(name: "Pullups")
-		let pushups = Exercise(name: "Pushups")
+		let pullups = Exercise(name: "Pullups", category: .weightAndReps)
+		let pushups = Exercise(name: "Pushups", category: .weightAndReps)
 		
 		modelContext.insert(pullups)
 		modelContext.insert(pushups)

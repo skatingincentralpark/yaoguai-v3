@@ -61,8 +61,8 @@ struct Test: View {
 		let modelContainer: ModelContainer
 		modelContainer = try ModelContainer(for: WorkoutTemplate.self, WorkoutRecord.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
 		
-		let pullups = Exercise(name: "Pullups")
-		let pushups = Exercise(name: "Pushups")
+		let pullups = Exercise(name: "Pullups", category: .weightAndReps)
+		let pushups = Exercise(name: "Pushups", category: .weightAndReps)
 		
 		modelContainer.mainContext.insert(pullups)
 		modelContainer.mainContext.insert(pushups)

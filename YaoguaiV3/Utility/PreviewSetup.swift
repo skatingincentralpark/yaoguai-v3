@@ -22,8 +22,8 @@ func setupPreview() throws -> (ModelContainer, WorkoutManager) {
 }
 
 func getWorkoutRecord(_ context: ModelContext) -> WorkoutRecord {
-	let pullups = Exercise(name: "Pullups")
-	let pushups = Exercise(name: "Pushups")
+	let pullups = Exercise(name: "Pullups", category: .weightAndReps)
+	let pushups = Exercise(name: "Pushups", category: .weightAndReps)
 	context.insert(pullups)
 	context.insert(pushups)
 	

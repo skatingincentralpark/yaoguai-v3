@@ -12,7 +12,6 @@ struct SetRecord: SetCommon {
 	var id = UUID()
 	var category: ExerciseCategory = ExerciseCategory.weightAndReps
 	
-	// Properties for weighted exercises
 	var value: Measurement<UnitMass>? {
 		didSet { toggleCompleteOffIfInvalid(value) }
 	}
@@ -22,13 +21,9 @@ struct SetRecord: SetCommon {
 	var rpe: Double? {
 		didSet { toggleCompleteOffIfInvalid(rpe) }
 	}
-	
-	// Properties for duration-based exercises
 	var duration: TimeInterval? {
 		didSet { toggleCompleteOffIfInvalid(duration) }
 	}
-	
-	// Properties for cardio/distance-based exercises
 	var distance: Measurement<UnitLength>? {
 		didSet { toggleCompleteOffIfInvalid(distance) }
 	}
@@ -47,8 +42,6 @@ struct SetRecord: SetCommon {
 			return duration != nil && value != nil
 		case .distanceAndWeight:
 			return distance != nil && value != nil
-		case .weightAndDistance:
-			return value != nil && distance != nil
 		}
 	}
 	

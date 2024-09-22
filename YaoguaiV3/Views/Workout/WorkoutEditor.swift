@@ -51,7 +51,7 @@ struct WorkoutEditor<T: WorkoutCommon>: View {
 		let modelContext: ModelContext
 		
 		func getExerciseDetail(for exerciseId: PersistentIdentifier) -> Exercise {
-			return modelContext.model(for: exerciseId) as? Exercise ?? Exercise(name: "AUTO_GENERATED")
+			return modelContext.model(for: exerciseId) as? Exercise ?? Exercise(name: "AUTO_GENERATED", category: .weightAndReps)
 		}
 		
 		var body: some View {

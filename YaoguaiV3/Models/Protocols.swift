@@ -44,7 +44,6 @@ enum ExerciseCategory: String, Codable {
 	case duration
 	case durationAndWeight
 	case distanceAndWeight
-	case weightAndDistance
 }
 
 protocol ExerciseCommon: Observable, AnyObject, Identifiable, PersistentModel {
@@ -80,16 +79,11 @@ protocol SetCommon: Identifiable, Codable, Equatable {
 	var id: UUID { get set }
 	var category: ExerciseCategory { get set }
 
-	// Properties for weighted exercises
 	var value: Measurement<UnitMass>? { get set }
 	var reps: Int? { get set }
 	var rpe: Double? { get set }
-	
-	// Properties for duration-based exercises
-	var duration: TimeInterval? { get set } // Duration in seconds
-
-	// Properties for cardio/distance-based exercises
-	var distance: Measurement<UnitLength>? { get set } // Distance in kilometers or meters
+	var duration: TimeInterval? { get set }
+	var distance: Measurement<UnitLength>? { get set }
 	
 	init(category: ExerciseCategory)
 }

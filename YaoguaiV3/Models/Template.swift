@@ -12,15 +12,10 @@ struct SetTemplate: SetCommon {
 	var id = UUID()
 	var category: ExerciseCategory = ExerciseCategory.weightAndReps
 	
-	// Properties for weighted exercises
 	var value: Measurement<UnitMass>?
 	var reps: Int?
 	var rpe: Double?
-	
-	// Properties for duration-based exercises
 	var duration: TimeInterval?
-
-	// Properties for cardio/distance-based exercises
 	var distance: Measurement<UnitLength>?
 }
 
