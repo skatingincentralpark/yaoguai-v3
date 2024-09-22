@@ -10,9 +10,18 @@ import SwiftData
 
 struct SetTemplate: SetCommon {
 	var id = UUID()
-	var value: Double?
+	var category: ExerciseCategory = ExerciseCategory.weightAndReps
+	
+	// Properties for weighted exercises
+	var value: Measurement<UnitMass>?
 	var reps: Int?
 	var rpe: Double?
+	
+	// Properties for duration-based exercises
+	var duration: TimeInterval?
+
+	// Properties for cardio/distance-based exercises
+	var distance: Measurement<UnitLength>?
 }
 
 @Model final class ExerciseTemplate: ExerciseCommon {
@@ -20,7 +29,7 @@ struct SetTemplate: SetCommon {
 	var details: Exercise?
 	var workout: WorkoutTemplate?
 	var sets: [SetTemplate] = []
-
+	
 	init() {}
 }
 

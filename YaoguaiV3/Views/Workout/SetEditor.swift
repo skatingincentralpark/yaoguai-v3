@@ -50,7 +50,15 @@ struct SetEditor<T: SetCommon>: View {
 			})
 			
 			SimpleTextFieldV2(
-				value: $set.value,
+				value: Binding(
+					get: {
+						doubleFromMeasurement(self.set.value)
+					}, set: { newValue in
+						if let newValue {
+							set.value = measurementFromDouble(newValue)
+						}
+					}
+				),
 				id: UUID().hashValue,
 				keyboardHeight: 300)
 			.focused($valueFocused)
@@ -62,7 +70,7 @@ struct SetEditor<T: SetCommon>: View {
 					.stroke(valueFocused ? .green : .gray, lineWidth: 3.0)
 			}
 			
-			SimpleTextFieldV2(
+			SimpleTextFieldV2(	
 				value: $set.reps,
 				id: UUID().hashValue,
 				keyboardHeight: 300)
@@ -101,11 +109,27 @@ struct SetEditor<T: SetCommon>: View {
 			set = mutableSet as! T // Cast back to T and assign to @Binding set
 		})
 	}
+	
+	// Convert Measurement<UnitMass> to Double for TextField
+	private func doubleFromMeasurement(_ measurement: Measurement<UnitMass>?) -> Double {
+		// If the measurement is nil, return 0.0 as the default
+		guard let measurement = measurement else {
+			return 0.0
+		}
+		// Convert the measurement to kilograms and return the double value
+		return measurement.converted(to: .kilograms).value
+	}
+	
+	// Convert Double back to Measurement<UnitMass>
+	private func measurementFromDouble(_ double: Double) -> Measurement<UnitMass>? {
+		// Assuming the input is in kilograms, create and return a Measurement<UnitMass>
+		return Measurement(value: double, unit: .kilograms)
+	}
 }
 
 struct CompleteToggleView: View {
 	@Binding var completeBinding: Bool
-
+	
 	var body: some View {
 		Toggle(isOn: $completeBinding) {
 			Image(systemName: "checkmark")

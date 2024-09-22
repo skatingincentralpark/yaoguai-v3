@@ -15,8 +15,10 @@ import SwiftData
 	var records: [ExerciseRecord] = []
 
 	var latestRecord: ExerciseRecord?
+	var category: ExerciseCategory
 	
-	init(name: String) {
+	init(name: String, category: ExerciseCategory) {
 		self.name = name
+		self.category = category
 	}
 }

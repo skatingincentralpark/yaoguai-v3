@@ -10,32 +10,46 @@ import SwiftData
 
 struct SetRecord: SetCommon {
 	var id = UUID()
-	var value: Double? {
-		didSet {
-			if value == nil {
-				_complete = false
-			}
-		}
+	var category: ExerciseCategory = ExerciseCategory.weightAndReps
+	
+	// Properties for weighted exercises
+	var value: Measurement<UnitMass>? {
+		didSet { checkCompletion(value) }
 	}
 	var reps: Int? {
-		didSet {
-			if reps == nil {
-				_complete = false
-			}
-		}
+		didSet { checkCompletion(reps) }
 	}
 	var rpe: Double? {
-		didSet {
-			if rpe == nil {
-				_complete = false
-			}
-		}
+		didSet { checkCompletion(rpe) }
+	}
+	
+	// Properties for duration-based exercises
+	var duration: TimeInterval? {
+		didSet { checkCompletion(duration) }
+	}
+	
+	// Properties for cardio/distance-based exercises
+	var distance: Measurement<UnitLength>? {
+		didSet { checkCompletion(distance) }
 	}
 	
 	private var _complete = false
 	
 	var isValid: Bool {
-		return value != nil && reps != nil
+		switch category {
+		case .weightAndReps:
+			return value != nil && reps != nil
+		case .reps:
+			return reps != nil
+		case .duration:
+			return duration != nil
+		case .durationAndWeight:
+			return duration != nil && value != nil
+		case .distanceAndWeight:
+			return distance != nil && value != nil
+		case .weightAndDistance:
+			return value != nil && distance != nil
+		}
 	}
 	
 	mutating func toggleComplete() {
@@ -45,17 +59,22 @@ struct SetRecord: SetCommon {
 	}
 	
 	var complete: Bool {
-		get {
-			_complete
-		}
+		get { _complete }
 		set {
 			if value != nil && reps != nil {
 				_complete = newValue
 			}
 		}
 	}
-}
 	
+	// Generic function to check if a value is non-nil
+	private mutating func checkCompletion<T>(_ field: T?) {
+		if field == nil {
+			_complete = false
+		}
+	}
+}
+
 @Model final class ExerciseRecord: ExerciseCommon {
 	var created: Date = Date()
 	var details: Exercise?

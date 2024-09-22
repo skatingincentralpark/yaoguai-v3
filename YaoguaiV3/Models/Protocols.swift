@@ -38,6 +38,15 @@ extension WorkoutCommon {
 	}
 }
 
+enum ExerciseCategory: String, Codable {
+	case weightAndReps
+	case reps
+	case duration
+	case durationAndWeight
+	case distanceAndWeight
+	case weightAndDistance
+}
+
 protocol ExerciseCommon: Observable, AnyObject, Identifiable, PersistentModel {
 	associatedtype WorkoutType: WorkoutCommon
 	associatedtype SetType: SetCommon
@@ -55,7 +64,9 @@ protocol ExerciseCommon: Observable, AnyObject, Identifiable, PersistentModel {
 
 extension ExerciseCommon {
 	func addSet() {
-		sets.append(SetType())
+		if let category = details?.category {
+			sets.append(SetType(category: category))
+		}
 	}
 	
 	func removeSet(_ set: SetType) {
@@ -67,17 +78,31 @@ extension ExerciseCommon {
 
 protocol SetCommon: Identifiable, Codable, Equatable {
 	var id: UUID { get set }
-	var value: Double? { get set }
+	var category: ExerciseCategory { get set }
+
+	// Properties for weighted exercises
+	var value: Measurement<UnitMass>? { get set }
 	var reps: Int? { get set }
 	var rpe: Double? { get set }
 	
-	init()
+	// Properties for duration-based exercises
+	var duration: TimeInterval? { get set } // Duration in seconds
+
+	// Properties for cardio/distance-based exercises
+	var distance: Measurement<UnitLength>? { get set } // Distance in kilometers or meters
+	
+	init(category: ExerciseCategory)
 }
 
 extension SetCommon {
+	init(category: ExerciseCategory) {
+		self.init(category: category)
+		self.id = UUID()
+	}
+	
 	var valueString: String {
 		guard let value = value else { return "" }
-		return String(value)
+		return value.formatted()
 	}
 	
 	var rpeString: String {
