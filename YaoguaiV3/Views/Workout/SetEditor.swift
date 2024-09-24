@@ -49,38 +49,16 @@ struct SetEditor<T: SetCommon>: View {
 				}
 			})
 			
-			SimpleTextFieldV2(
-				value: Binding(
-					get: {
-						doubleFromMeasurement(self.set.value)
-					}, set: { newValue in
-						if let newValue {
-							set.value = measurementFromDouble(newValue)
-						}
-					}
-				),
-				id: UUID().hashValue,
-				keyboardHeight: 300)
-			.focused($valueFocused)
-			.frame(height: 30)
-			.background(.yellow)
-			.clipShape(RoundedRectangle(cornerRadius: 6))
-			.overlay {
-				RoundedRectangle(cornerRadius: 6)
-					.stroke(valueFocused ? .green : .gray, lineWidth: 3.0)
-			}
-			
-			SimpleTextFieldV2(	
-				value: $set.reps,
-				id: UUID().hashValue,
-				keyboardHeight: 300)
-			.focused($repsFocused)
-			.frame(width: 70, height: 30)
-			.background(.yellow)
-			.clipShape(RoundedRectangle(cornerRadius: 6))
-			.overlay {
-				RoundedRectangle(cornerRadius: 6)
-					.stroke(repsFocused ? .green : .gray, lineWidth: 3.0)
+			Group {
+				UnitMassTextField(value: $set.value)
+				UnitLengthTextField(value: $set.distance)
+				TimeIntervalPicker(timeInterval: $set.duration)
+				SimpleTextFieldV2(
+					value: $set.reps,
+				)
+				SimpleTextFieldV2(
+					value: $set.rpe,
+				)
 			}
 			
 			Button(role: .destructive) {
@@ -110,21 +88,7 @@ struct SetEditor<T: SetCommon>: View {
 		})
 	}
 	
-	// Convert Measurement<UnitMass> to Double for TextField
-	private func doubleFromMeasurement(_ measurement: Measurement<UnitMass>?) -> Double {
-		// If the measurement is nil, return 0.0 as the default
-		guard let measurement = measurement else {
-			return 0.0
-		}
-		// Convert the measurement to kilograms and return the double value
-		return measurement.converted(to: .kilograms).value
-	}
-	
-	// Convert Double back to Measurement<UnitMass>
-	private func measurementFromDouble(_ double: Double) -> Measurement<UnitMass>? {
-		// Assuming the input is in kilograms, create and return a Measurement<UnitMass>
-		return Measurement(value: double, unit: .kilograms)
-	}
+
 }
 
 struct CompleteToggleView: View {

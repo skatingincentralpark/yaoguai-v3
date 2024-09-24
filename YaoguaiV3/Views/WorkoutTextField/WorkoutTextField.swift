@@ -1,28 +1,11 @@
 //
-//  WorkoutTextField.swift
+//  SimpleTextFieldV2.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 13/8/2024.
 //
 
 import SwiftUI
-
-struct WorkoutTextField: View {
-	@FocusState var focused
-	@State private var input: Int? = 1
-	
-	var body: some View {
-		SimpleTextFieldV2(value: $input, id: UUID().hashValue, keyboardHeight: 300)
-			.focused($focused)
-			.frame(height: 30)
-			.background(.yellow)
-			.clipShape(RoundedRectangle(cornerRadius: 6))
-			.overlay {
-				RoundedRectangle(cornerRadius: 6)
-					.stroke(focused ? .green : .gray, lineWidth: 3.0)
-			}
-	}
-}
 
 class PaddedTextField: UITextField {
 	var textPadding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -40,7 +23,26 @@ class PaddedTextField: UITextField {
 	}
 }
 
-struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStringConvertible {
+struct SimpleTextFieldV2<V>: View where V: Numeric & LosslessStringConvertible {
+	@Binding var value: V?
+	var id: Int = UUID().hashValue
+	
+	@FocusState private var focused: Bool
+	
+	var body: some View {
+		SimpleTextFieldImpl(value: $value, id: id, keyboardHeight: 70)
+			.focused($focused)
+			.frame(width: 70, height: 30)
+			.background(.yellow)
+			.clipShape(RoundedRectangle(cornerRadius: 6))
+			.overlay {
+				RoundedRectangle(cornerRadius: 6)
+					.stroke(focused ? .green : .gray, lineWidth: 3.0)
+			}
+	}
+}
+
+struct SimpleTextFieldImpl<V>: UIViewRepresentable where V: Numeric & LosslessStringConvertible {
 	@Binding var value: V?
 	var id: Int
 	var keyboardHeight: CGFloat
@@ -214,25 +216,4 @@ struct SimpleTextFieldV2<V>: UIViewRepresentable where V: Numeric & LosslessStri
 		}
 		
 	}
-}
-
-struct ButtonTextFieldV2Preview: View {
-	var body: some View {
-		ScrollView {
-			VStack(spacing: 10) {
-				ForEach(0...10, id: \.self) { i in
-					HStack(spacing: 10) {
-						WorkoutTextField()
-						WorkoutTextField()
-						WorkoutTextField()
-					}
-				}
-			}
-			.padding()
-		}
-	}
-}
-
-#Preview {
-	ButtonTextFieldV2Preview()
 }
