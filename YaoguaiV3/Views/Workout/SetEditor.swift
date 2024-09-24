@@ -53,12 +53,8 @@ struct SetEditor<T: SetCommon>: View {
 				UnitMassTextField(value: $set.value)
 				UnitLengthTextField(value: $set.distance)
 				TimeIntervalPicker(timeInterval: $set.duration)
-				SimpleTextFieldV2(
-					value: $set.reps,
-				)
-				SimpleTextFieldV2(
-					value: $set.rpe,
-				)
+				SimpleTextFieldV2(value: $set.reps)
+				SimpleTextFieldV2(value: $set.rpe)
 			}
 			
 			Button(role: .destructive) {
