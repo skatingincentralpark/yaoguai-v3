@@ -15,10 +15,6 @@ struct SetEditor<T: SetCommon>: View {
 	
 	var delete: (T) -> Void
 	
-	@FocusState private var valueFocused: Bool
-	@FocusState private var repsFocused: Bool
-	@FocusState private var rpeFocused: Bool
-	
 	init(set: Binding<T>, exercise: Exercise?, index: Int, delete: @escaping (T) -> Void) {
 		self._set = set
 		self.exercise = exercise
@@ -44,28 +40,50 @@ struct SetEditor<T: SetCommon>: View {
 						.fixedSize()
 				}
 			})
-			.disabled(previousSet == nil)
 			
 			Group {
-				HStack {
-					UnitMassTextField(value: $set.value)
-					Text(set.valueString)
-				}
-				HStack {
-					UnitLengthTextField(value: $set.distance)
-					Text(set.distanceString)
-				}
-				HStack {
-					TimeIntervalPicker(timeInterval: $set.duration)
-					Text(set.durationString)
-				}
-				HStack {
-					SimpleTextFieldV2(value: $set.reps)
-					Text("\(set.repsString) reps")
-				}
-				HStack {
-					SimpleTextFieldV2(value: $set.rpe)
-					Text("\(set.rpeString) rpe")
+				switch set.category {
+				case .weightAndReps:
+					HStack {
+						UnitMassTextField(value: $set.value)
+						Text(set.valueString)
+					}
+					HStack {
+						SimpleTextFieldV2(value: $set.reps)
+						Text("\(set.repsString) reps")
+					}
+					HStack {
+						SimpleTextFieldV2(value: $set.rpe)
+						Text("\(set.rpeString) rpe")
+					}
+				case .distanceAndWeight:
+					HStack {
+						UnitLengthTextField(value: $set.distance)
+						Text(set.distanceString)
+					}
+					HStack {
+						UnitMassTextField(value: $set.value)
+						Text(set.valueString)
+					}
+				case .duration:
+					HStack {
+						TimeIntervalPicker(timeInterval: $set.duration)
+						Text(set.durationString)
+					}
+				case .durationAndWeight:
+					HStack {
+						TimeIntervalPicker(timeInterval: $set.duration)
+						Text(set.durationString)
+					}
+					HStack {
+						UnitMassTextField(value: $set.value)
+						Text(set.valueString)
+					}
+				case .reps:
+					HStack {
+						SimpleTextFieldV2(value: $set.reps)
+						Text("\(set.repsString) reps")
+					}
 				}
 			}
 			
