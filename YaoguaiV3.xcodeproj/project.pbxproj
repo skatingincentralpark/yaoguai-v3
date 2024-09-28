@@ -33,6 +33,8 @@
 		A1C5E74C2CA0235300C9B902 /* UnitMassTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E74B2CA0235300C9B902 /* UnitMassTextField.swift */; };
 		A1C5E74F2CA0288900C9B902 /* UnitLengthTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E74E2CA0288900C9B902 /* UnitLengthTextField.swift */; };
 		A1C5E7512CA0289C00C9B902 /* TimeIntervalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E7502CA0289C00C9B902 /* TimeIntervalPicker.swift */; };
+		A1C5E7552CA7A01800C9B902 /* ExerciseDetailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E7542CA7A01800C9B902 /* ExerciseDetailList.swift */; };
+		A1C5E7572CA7A19100C9B902 /* ExerciseDetailEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E7562CA7A19100C9B902 /* ExerciseDetailEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,8 @@
 		A1C5E74B2CA0235300C9B902 /* UnitMassTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitMassTextField.swift; sourceTree = "<group>"; };
 		A1C5E74E2CA0288900C9B902 /* UnitLengthTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitLengthTextField.swift; sourceTree = "<group>"; };
 		A1C5E7502CA0289C00C9B902 /* TimeIntervalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalPicker.swift; sourceTree = "<group>"; };
+		A1C5E7542CA7A01800C9B902 /* ExerciseDetailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailList.swift; sourceTree = "<group>"; };
+		A1C5E7562CA7A19100C9B902 /* ExerciseDetailEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +175,7 @@
 				A1802C262C7547A000272B66 /* Workout */,
 				A19739382C4B997100356010 /* WorkoutTextField */,
 				A13E110D2C96BE9E0074BC49 /* WorkoutTemplateList.swift */,
+				A1C5E7582CA7A1B100C9B902 /* ExerciseDetail */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -214,6 +219,15 @@
 				A1C5E7502CA0289C00C9B902 /* TimeIntervalPicker.swift */,
 			);
 			path = SetTextFields;
+			sourceTree = "<group>";
+		};
+		A1C5E7582CA7A1B100C9B902 /* ExerciseDetail */ = {
+			isa = PBXGroup;
+			children = (
+				A1C5E7542CA7A01800C9B902 /* ExerciseDetailList.swift */,
+				A1C5E7562CA7A19100C9B902 /* ExerciseDetailEditor.swift */,
+			);
+			path = ExerciseDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -328,10 +342,12 @@
 				A1C5E7512CA0289C00C9B902 /* TimeIntervalPicker.swift in Sources */,
 				A11F26882C3E90D500FD971E /* Dashboard.swift in Sources */,
 				A1802C282C7547C700272B66 /* SetEditor.swift in Sources */,
+				A1C5E7572CA7A19100C9B902 /* ExerciseDetailEditor.swift in Sources */,
 				A1802C462C829DB500272B66 /* Collection.swift in Sources */,
 				A1802C2A2C7547DF00272B66 /* ExerciseEditor.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
 				A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */,
+				A1C5E7552CA7A01800C9B902 /* ExerciseDetailList.swift in Sources */,
 				A14A12012C87231600D47B9F /* UITextField.swift in Sources */,
 				A1C5E74F2CA0288900C9B902 /* UnitLengthTextField.swift in Sources */,
 				A11F268A2C3FFC4700FD971E /* SpecialFocusTextStyle.swift in Sources */,

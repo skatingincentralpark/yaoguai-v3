@@ -38,12 +38,27 @@ extension WorkoutCommon {
 	}
 }
 
-enum ExerciseCategory: String, Codable {
+enum ExerciseCategory: String, Codable, CaseIterable {
 	case weightAndReps
 	case reps
 	case duration
 	case durationAndWeight
 	case distanceAndWeight
+	
+	var title: String {
+		switch self {
+		case .weightAndReps:
+			return "Weight and Reps"
+		case .reps:
+			return "Reps"
+		case .duration:
+			return "Duration"
+		case .durationAndWeight:
+			return "Duration and Weight"
+		case .distanceAndWeight:
+			return "Distance and Weight"
+		}
+	}
 }
 
 protocol ExerciseCommon: Observable, AnyObject, Identifiable, PersistentModel {
