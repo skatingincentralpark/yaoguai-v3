@@ -10,13 +10,17 @@ import SwiftData
 
 struct SetTemplate: SetCommon {
 	var id = UUID()
-	var category: ExerciseCategory = ExerciseCategory.weightAndReps
+	var category: ExerciseCategory
 	
 	var value: Measurement<UnitMass>?
 	var reps: Int?
 	var rpe: Double?
 	var duration: TimeInterval?
 	var distance: Measurement<UnitLength>?
+	
+	init(category: ExerciseCategory) {
+		self.category = category
+	}
 }
 
 @Model final class ExerciseTemplate: ExerciseCommon {

@@ -89,11 +89,6 @@ protocol SetCommon: Identifiable, Codable, Equatable {
 }
 
 extension SetCommon {
-	init(category: ExerciseCategory) {
-		self.init(category: category)
-		self.id = UUID()
-	}
-	
 	var valueString: String {
 		guard let value = value else { return "" }
 		return value.formatted()

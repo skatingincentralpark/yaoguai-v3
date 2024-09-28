@@ -22,6 +22,10 @@ struct Dashboard: View {
 			.buttonStyle(.bordered)
 			.padding()
 			
+			Button("Delete Exercise Details", role: .destructive) {
+				try? modelContext.delete(model: Exercise.self)
+			}
+			
 			ScrollView {
 				if workoutManager.currentWorkout != nil {
 					Button("Continue Workout"){

@@ -24,7 +24,7 @@ final class WorkoutManagerTests: XCTestCase {
 			try FileManager.default.removeItem(at: savePath)
 		}
 	}
-
+	
 	// MARK: - Tests
 	
 	//	Should initialise with no data
@@ -148,7 +148,12 @@ final class WorkoutManagerTests: XCTestCase {
 		let exerciseRecord = ExerciseRecord()
 		exerciseRecord.details = try getExerciseDetail(from: container.mainContext)
 		
-		exerciseRecord.sets.append(createValidSet())
+		exerciseRecord.addSet()
+		exerciseRecord.sets[0].value = Measurement(value: 1.0, unit: .kilograms)
+		exerciseRecord.sets[0].reps = 1
+		exerciseRecord.sets[0].rpe = 1
+		exerciseRecord.sets[0].toggleComplete()
+		
 		workoutManager.currentWorkout?.exercises.append(exerciseRecord)
 		
 		workoutManager.complete()
@@ -195,11 +200,11 @@ final class WorkoutManagerTests: XCTestCase {
 		
 		let exerciseRecord = ExerciseRecord()
 		exerciseRecord.details = try getExerciseDetail(from: container.mainContext)
-		var set = SetRecord()
-		set.reps = 5
-		set.value = 50
-		set.complete = true
-		exerciseRecord.sets.append(set)
+		exerciseRecord.addSet()
+		exerciseRecord.sets[0].value = Measurement(value: 1.0, unit: .kilograms)
+		exerciseRecord.sets[0].reps = 1
+		exerciseRecord.sets[0].rpe = 1
+		exerciseRecord.sets[0].toggleComplete()
 		workoutManager.currentWorkout?.exercises.append(exerciseRecord)
 		
 		workoutManager.cancel()
@@ -227,8 +232,8 @@ final class WorkoutManagerTests: XCTestCase {
 		let container = try ModelContainer(for: WorkoutRecord.self, configurations: config)
 		
 		func addDummyExercises(in modelContext: ModelContext) {
-			let pullups = Exercise(name: "Pullups")
-			let pushups = Exercise(name: "Pushups")
+			let pullups = Exercise(name: "Pullups", category: .weightAndReps)
+			let pushups = Exercise(name: "Pushups", category: .weightAndReps)
 			
 			modelContext.insert(pullups)
 			modelContext.insert(pushups)
@@ -249,15 +254,7 @@ final class WorkoutManagerTests: XCTestCase {
 		let descriptor = FetchDescriptor<Exercise>(predicate: #Predicate { _ in true })
 		let exercises = try modelContext.fetch(descriptor)
 		let id = exercises.randomElement()!.id
-		return modelContext.model(for: id) as? Exercise ?? Exercise(name: "AUTO_GENERATED")
-	}
-	
-	func createValidSet() -> SetRecord {
-		var set = SetRecord()
-		set.reps = 5
-		set.value = 50
-		set.complete = true
-		return set
+		return modelContext.model(for: id) as? Exercise ?? Exercise(name: "AUTO_GENERATED", category: .durationAndWeight)
 	}
 	
 	func fetchModelCount<T: PersistentModel>(ofType type: T.Type, in context: ModelContext) throws -> Int {
