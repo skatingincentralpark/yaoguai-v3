@@ -30,7 +30,7 @@ struct SimpleTextFieldV2<V>: View where V: Numeric & LosslessStringConvertible {
 	@FocusState private var focused: Bool
 	
 	var body: some View {
-		SimpleTextFieldImpl(value: $value, id: id, keyboardHeight: 70)
+		SimpleTextFieldImpl(value: $value, id: id, keyboardHeight: 300)
 			.focused($focused)
 			.frame(width: 70, height: 30)
 			.background(.yellow)

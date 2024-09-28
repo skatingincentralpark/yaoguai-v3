@@ -103,4 +103,15 @@ extension SetCommon {
 		guard let reps = reps else { return "" }
 		return String(reps)
 	}
+	
+	var durationString: String {
+		guard let duration = duration else { return "" }
+		let seconds = Duration.seconds(duration)
+		return seconds.formatted(.time(pattern: .minuteSecond))
+	}
+	
+	var distanceString: String {
+		guard let distance = distance else { return "" }
+		return distance.formatted()
+	}
 }

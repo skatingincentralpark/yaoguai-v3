@@ -28,11 +28,7 @@ struct SetEditor<T: SetCommon>: View {
 	}
 	
 	var body: some View {
-		HStack {
-			Text("value: \(set.valueString)")
-			Text("reps: \(set.repsString)")
-		}
-		HStack {
+		VStack(alignment: .leading, spacing: 5) {
 			Button(action: {
 				if let previousSet {
 					set.reps = previousSet.reps
@@ -44,30 +40,48 @@ struct SetEditor<T: SetCommon>: View {
 					Text("\(previousSet.valueString) kg x \(previousSet.repsString)")
 						.fixedSize()
 				} else {
-					Text("-")
+					Text("No Previous Set ")
 						.fixedSize()
 				}
 			})
+			.disabled(previousSet == nil)
 			
 			Group {
-				UnitMassTextField(value: $set.value)
-				UnitLengthTextField(value: $set.distance)
-				TimeIntervalPicker(timeInterval: $set.duration)
-				SimpleTextFieldV2(value: $set.reps)
-				SimpleTextFieldV2(value: $set.rpe)
+				HStack {
+					UnitMassTextField(value: $set.value)
+					Text(set.valueString)
+				}
+				HStack {
+					UnitLengthTextField(value: $set.distance)
+					Text(set.distanceString)
+				}
+				HStack {
+					TimeIntervalPicker(timeInterval: $set.duration)
+					Text(set.durationString)
+				}
+				HStack {
+					SimpleTextFieldV2(value: $set.reps)
+					Text("\(set.repsString) reps")
+				}
+				HStack {
+					SimpleTextFieldV2(value: $set.rpe)
+					Text("\(set.rpeString) rpe")
+				}
 			}
 			
-			Button(role: .destructive) {
-				delete(set)
-			} label: {
-				Image(systemName: "xmark")
-			}
-			.buttonStyle(.bordered)
-			.tint(.red)
-			
-			// Check if `set` conforms to SetRecord
-			if let toggleableSet = set as? SetRecord {
-				CompleteToggleView(completeBinding: makeCompleteBinding(for: toggleableSet))
+			HStack {
+				Button(role: .destructive) {
+					delete(set)
+				} label: {
+					Image(systemName: "xmark")
+				}
+				.buttonStyle(.bordered)
+				.tint(.red)
+				
+				// Check if `set` conforms to SetRecord
+				if let toggleableSet = set as? SetRecord {
+					CompleteToggleView(completeBinding: makeCompleteBinding(for: toggleableSet))
+				}
 			}
 		}
 	}
