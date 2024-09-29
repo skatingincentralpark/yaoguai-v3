@@ -11,23 +11,34 @@ import SwiftData
 struct WorkoutEditor<T: WorkoutCommon>: View {
 	@Bindable var workout: T
 	let modelContext: ModelContext
+	@State private var exerciseListSheetShown = false
 	
 	init(workout: T, modelContext: ModelContext) {
 		self.workout = workout
 		self.modelContext = modelContext
-		//		print("Initialising WorkoutEditor")
 	}
 	
 	var body: some View {
 		ScrollView {
 			VStack(alignment: .leading) {
 				TextField("Name", text: $workout.name)
-				AddRandomExerciseButton(workout: workout, modelContext: modelContext)
+				Button("Add Exercise") {
+					exerciseListSheetShown = true
+				}
 				ExerciseList(workout: workout, modelContext: modelContext)
 			}
 			.padding()
 			.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 		}
+		.sheet(isPresented: $exerciseListSheetShown, content: {
+			ExerciseDetailList { exerciseDetails in
+				if let exercise = modelContext.model(for: exerciseDetails.id) as? Exercise {
+					workout.addExercise(details: exercise)
+				} else {
+					fatalError("Exercise not found.")
+				}
+			}
+		})
 	}
 	
 	struct ExerciseList: View {
@@ -42,25 +53,6 @@ struct WorkoutEditor<T: WorkoutCommon>: View {
 				})
 				.padding(.bottom)
 			}
-		}
-	}
-	
-	struct AddRandomExerciseButton: View {
-		@Query private var exercises: [Exercise]
-		@Bindable var workout: T
-		let modelContext: ModelContext
-		
-		func getExerciseDetail(for exerciseId: PersistentIdentifier) -> Exercise {
-			return modelContext.model(for: exerciseId) as? Exercise ?? Exercise(name: "AUTO_GENERATED", category: .weightAndReps)
-		}
-		
-		var body: some View {
-			Button("Add Random Exercise") {
-				guard let exerciseDetails = exercises.randomElement() else { return }
-				workout.addExercise(with: getExerciseDetail(for: exerciseDetails.id))
-				print("workout.exercises.count: \(workout.exercises.count)")
-			}
-			.padding(.bottom)
 		}
 	}
 }

@@ -9,26 +9,70 @@ import SwiftUI
 import SwiftData
 
 struct ExerciseDetailEditor: View {
-	@Bindable var exercise: Exercise
+	// This may have to be a @Bindable
+	let exercise: Exercise?
+	
+	@State private var name: String = ""
+	@State private var category: ExerciseCategory = .weightAndReps
+	
+	@Environment(\.modelContext) private var modelContext
+	@Environment(\.dismiss) private var dismiss
+	
+	private var editorTitle: String {
+		exercise == nil ? "Add Exercise" : "Edit Exercise"
+	}
+	
+	init(exercise: Exercise? = nil) {
+		self.exercise = exercise
+	}
 	
 	var body: some View {
-		ScrollView {
-			VStack(alignment: .leading) {
-				Text(exercise.name)
-					.font(.title)
-				Text(exercise.category.title)
-					.font(.title3)
-				
-				LabeledContent {
-					TextField("Name", text: $exercise.name)
-						.textFieldStyle(.roundedBorder)
-				} label: {
-					Text("Name:")
+		NavigationStack {
+			ScrollView {
+				VStack(alignment: .leading) {
+					Text(name)
+						.font(.title)
+					Text(category.title)
+						.font(.title3)
+					
+					LabeledContent {
+						TextField("Name", text: $name)
+							.textFieldStyle(.roundedBorder)
+					} label: {
+						Text("Name:")
+					}
+					
+					ExerciseCategoryPicker(selectedCategory: $category)
 				}
-				
-				ExerciseCategoryPicker(selectedCategory: $exercise.category)
+				.padding()
+				.onAppear {
+					if let exercise {
+						// Edit the incoming exercise.
+						name = exercise.name
+						category = exercise.category
+					}
+				}
+				.toolbar {
+					ToolbarItem(placement: .principal) {
+						Text(editorTitle)
+					}
+					
+					ToolbarItem(placement: .confirmationAction) {
+						Button("Save") {
+							withAnimation {
+								save()
+								dismiss()
+							}
+						}
+					}
+					
+					ToolbarItem(placement: .cancellationAction) {
+						Button("Cancel", role: .cancel) {
+							dismiss()
+						}
+					}
+				}
 			}
-			.padding()
 		}
 	}
 	
@@ -47,11 +91,26 @@ struct ExerciseDetailEditor: View {
 			.clipShape(RoundedRectangle(cornerRadius: 8))
 		}
 	}
-	
 }
 
-#Preview {
-	let exercise = Exercise(name: "Farmer Carries", category: .durationAndWeight)
-	
-	return ExerciseDetailEditor(exercise: exercise)
+extension ExerciseDetailEditor {
+	private func save() {
+		if let exercise {
+			// Edit the exercise.
+			exercise.name = name
+			exercise.category = category
+		} else {
+			// Add an exercise.
+			let newExercise = Exercise(name: name, category: category)
+			modelContext.insert(newExercise)
+		}
+	}
+}
+
+#Preview("Existing Exercise") {
+	ExerciseDetailEditor(exercise: Exercise(name: "Burpees", category: .reps))
+}
+
+#Preview("New Exercise") {
+	ExerciseDetailEditor()
 }

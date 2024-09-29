@@ -16,6 +16,7 @@ struct YaoguaiV3App: App {
 	init() {
 		let schema = Schema([
 			WorkoutRecord.self,
+			WorkoutTemplate.self
 		])
 		
 		let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)

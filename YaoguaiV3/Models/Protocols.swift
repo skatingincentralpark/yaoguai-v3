@@ -18,12 +18,13 @@ protocol WorkoutCommon: Observable, AnyObject, Identifiable, PersistentModel {
 	
 	init()
 	
-	func addExercise(with details: Exercise)
+	func addExercise(details: Exercise)
 	func removeExercise(_ exercise: ExerciseType)
 }
 
 extension WorkoutCommon {
-	func addExercise(with details: Exercise) {
+	/// Such as adding a WorkoutRecord
+	func addExercise(details: Exercise) {
 		let exercise = ExerciseType()
 		exercise.details = details
 		exercises.append(exercise)
