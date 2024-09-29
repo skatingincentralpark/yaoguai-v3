@@ -225,6 +225,21 @@ final class WorkoutManagerTests: XCTestCase {
 		XCTAssertEqual(exerciseRecordsInDB, 0, "Expected 0 exercise records in the database after after canceling")
 	}
 	
+	@MainActor
+	func testAddDuplicateExercisesToWorkout() async throws {
+		let container = try await createContainer()
+		let workoutManager = try await setup(with: container)
+		
+		let workoutRecord = WorkoutRecord()
+		let exercise = Exercise(name: "Burpees", category: .reps)
+		container.mainContext.insert(workoutRecord)
+		container.mainContext.insert(exercise)
+		workoutRecord.addExercise(details: exercise)
+		workoutRecord.addExercise(details: exercise)
+		
+		XCTAssertEqual(workoutRecord.exercises.count, 1, "Expected 1 exercise records after attempting to add duplicate")
+	}
+	
 	// MARK: - Helper Functions
 	@MainActor
 	func createContainer() async throws -> ModelContainer {

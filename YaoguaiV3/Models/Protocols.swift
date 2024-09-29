@@ -25,6 +25,16 @@ protocol WorkoutCommon: Observable, AnyObject, Identifiable, PersistentModel {
 extension WorkoutCommon {
 	/// Such as adding a WorkoutRecord
 	func addExercise(details: Exercise) {
+		if exercises.contains(where: { $0.details?.id == details.id }) {
+			
+			/// We don't need to print warning if in test environment
+			if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
+				print("⚠️ Cannot add duplicate exercises to the workout.")
+			}
+			
+			return
+		}
+		
 		let exercise = ExerciseType()
 		exercise.details = details
 		exercises.append(exercise)
