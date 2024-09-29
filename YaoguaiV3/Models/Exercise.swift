@@ -13,6 +13,9 @@ import SwiftData
 	
 	@Relationship(deleteRule: .cascade, inverse: \ExerciseRecord.details)
 	var records: [ExerciseRecord] = []
+	
+	@Relationship(deleteRule: .cascade, inverse: \ExerciseTemplate.details)
+	var templates: [ExerciseTemplate] = []
 
 	var latestRecord: ExerciseRecord?
 	var category: ExerciseCategory
