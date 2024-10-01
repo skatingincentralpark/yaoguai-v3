@@ -83,6 +83,7 @@ protocol ExerciseCommon: Observable, AnyObject, Identifiable, PersistentModel {
 	
 	func addSet()
 	func removeSet(_ set: SetType)
+	func replaceDetails(newDetails: Exercise)
 	
 	init()
 }
@@ -98,6 +99,15 @@ extension ExerciseCommon {
 		if let index = sets.firstIndex(where: { $0 == set }) {
 			sets.remove(at: index)
 		}
+	}
+	
+	func replaceDetails(newDetails: Exercise) {
+		self.details = newDetails
+		self.sets = self.sets.map { set in
+			 var updatedSet = set
+			 updatedSet.category = newDetails.category
+			 return updatedSet
+		 }
 	}
 }
 

@@ -173,9 +173,9 @@
 			isa = PBXGroup;
 			children = (
 				A1802C262C7547A000272B66 /* Workout */,
+				A1C5E7582CA7A1B100C9B902 /* ExerciseDetail */,
 				A19739382C4B997100356010 /* WorkoutTextField */,
 				A13E110D2C96BE9E0074BC49 /* WorkoutTemplateList.swift */,
-				A1C5E7582CA7A1B100C9B902 /* ExerciseDetail */,
 			);
 			path = Views;
 			sourceTree = "<group>";

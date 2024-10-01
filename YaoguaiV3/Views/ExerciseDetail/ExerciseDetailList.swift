@@ -11,15 +11,27 @@ import SwiftData
 struct ExerciseDetailList: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.dismiss) private var dismiss
+	
 	@Query private var exercises: [Exercise]
+	
+	var category: ExerciseCategory?
+	
+	var exercisesFiltered: [Exercise] {
+		if let category = category {
+			return exercises.filter { $0.category == category }
+		}
+		
+		return exercises
+	}
 	
 	@State private var newExerciseSheetPresented = false
 	@State private var exerciseToEdit: Exercise? = nil
 	
 	var onSelect: ((Exercise) -> Void)?
 	
-	init(onSelect: ((Exercise) -> Void)? = nil) {
+	init(onSelect: ((Exercise) -> Void)? = nil, category: ExerciseCategory? = nil) {
 		self.onSelect = onSelect
+		self.category = category
 	}
 	
 	var body: some View {
@@ -28,7 +40,7 @@ struct ExerciseDetailList: View {
 				Button("Add New Exercise") {
 					newExerciseSheetPresented = true
 				}
-				ForEach(exercises) { exercise in
+				ForEach(exercisesFiltered) { exercise in
 					Button(action: {
 						if let onSelect {
 							onSelect(exercise)
