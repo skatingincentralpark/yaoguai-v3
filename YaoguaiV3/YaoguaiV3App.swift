@@ -32,10 +32,48 @@ struct YaoguaiV3App: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			Dashboard()
+			TabView {
+				Group {
+					Dashboard()
+						.tabItem {
+							Label("Home", systemImage: "figure.dance")
+						}
+					
+					WorkoutTemplateList()
+						.tabItem {
+							Label("Templates", systemImage: "list.bullet.rectangle.fill")
+						}
+					
+					ExerciseDetailList()
+						.tabItem {
+							Label("Exercises", systemImage: "list.bullet")
+						}
+				}
+				.safeAreaInset(edge: .bottom) {
+					ModelCounter()
+				}
+			}
 		}
 		.modelContainer(sharedModelContainer)
 		.environment(workoutManager)
+	}
+	
+	struct ModelCounter: View {
+		@Query private var exercises: [Exercise]
+		@Query private var exerciseRecords: [ExerciseRecord]
+		@Query private var workoutRecords: [WorkoutRecord]
+		
+		var body: some View {
+			VStack {
+				Text("Exercises count: \(exercises.count)")
+				Text("ExerciseRecords count: \(exerciseRecords.count)")
+				Text("WorkoutRecords count: \(workoutRecords.count)")
+			}
+			.font(.footnote.monospaced())
+			.foregroundStyle(.secondary)
+			.frame(maxWidth: .infinity)
+			.padding()
+		}
 	}
 }
 
