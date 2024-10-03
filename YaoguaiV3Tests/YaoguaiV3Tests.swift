@@ -260,8 +260,8 @@ final class WorkoutManagerTests: XCTestCase {
 	}
 	
 	@MainActor
-	func setup(with container: ModelContainer) async throws -> WorkoutManager {
-		let workoutManager = WorkoutManager(modelContext: container.mainContext)
+	func setup(with container: ModelContainer) async throws -> CurrentWorkoutManager {
+		let workoutManager = CurrentWorkoutManager(modelContext: container.mainContext)
 		return workoutManager
 	}
 	

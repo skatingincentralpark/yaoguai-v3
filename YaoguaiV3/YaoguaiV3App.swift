@@ -11,7 +11,7 @@ import SwiftData
 @main
 struct YaoguaiV3App: App {
 	var sharedModelContainer: ModelContainer
-	@State private var workoutManager: WorkoutManager
+	@State private var workoutManager: CurrentWorkoutManager
 	
 	init() {
 		let schema = Schema([
@@ -24,7 +24,7 @@ struct YaoguaiV3App: App {
 		do {
 			let modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
 			self.sharedModelContainer = modelContainer
-			self._workoutManager = State(initialValue: WorkoutManager(modelContext: modelContainer.mainContext))
+			self._workoutManager = State(initialValue: CurrentWorkoutManager(modelContext: modelContainer.mainContext))
 		} catch {
 			fatalError("Could not create ModelContainer: \(error)")
 		}

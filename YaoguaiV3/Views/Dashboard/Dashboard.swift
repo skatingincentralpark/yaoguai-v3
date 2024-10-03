@@ -10,7 +10,7 @@ import SwiftData
 
 struct Dashboard: View {
 	@Environment(\.modelContext) private var modelContext
-	@Environment(WorkoutManager.self) private var workoutManager
+	@Environment(CurrentWorkoutManager.self) private var workoutManager
 	
 	@State var newWorkoutSheetShowing = false
 	

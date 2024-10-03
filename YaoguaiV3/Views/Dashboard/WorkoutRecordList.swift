@@ -12,7 +12,7 @@ struct WorkoutRecordList: View {
 	@Query private var workoutRecords: [WorkoutRecord]
 	@State private var workoutBeingEdited: WorkoutRecord? = nil
 	@Environment(\.modelContext) private var modelContext
-	@Environment(WorkoutManager.self) private var workoutManager
+	@Environment(CurrentWorkoutManager.self) private var workoutManager
 	var workoutRecordsFiltered: [WorkoutRecord] {
 		workoutRecords.filter { $0.id != workoutManager.currentWorkoutId }
 	}

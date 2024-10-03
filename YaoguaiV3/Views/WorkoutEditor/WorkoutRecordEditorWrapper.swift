@@ -12,7 +12,7 @@ import SwiftData
 /// But, for the ViewModel, we use the child context
 struct WorkoutRecordEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
-	@Environment(WorkoutManager.self) private var workoutManager
+	@Environment(CurrentWorkoutManager.self) private var workoutManager
 	@State private var viewModel: ViewModel
 	
 	init(workoutId: PersistentIdentifier,

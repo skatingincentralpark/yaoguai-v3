@@ -1,5 +1,5 @@
 //
-//  WorkoutManager.swift
+//  CurrentWorkoutManager.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 12/7/2024.
@@ -11,7 +11,7 @@ import SwiftUI
 import Observation
 
 @Observable
-final class WorkoutManager {
+final class CurrentWorkoutManager {
 	var modelContext: ModelContext
 	var currentWorkoutId: PersistentIdentifier? {
 		didSet {
