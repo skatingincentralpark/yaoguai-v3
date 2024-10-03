@@ -1,5 +1,5 @@
 //
-//  WorkoutEditorWrapper.swift
+//  WorkoutRecordEditorWrapper.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 21/8/2024.
@@ -10,7 +10,7 @@ import SwiftData
 
 /// We use the main context for the WorkoutManager
 /// But, for the ViewModel, we use the child context
-struct WorkoutEditorWrapper: View {
+struct WorkoutRecordEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(WorkoutManager.self) private var workoutManager
 	@State private var viewModel: ViewModel
@@ -86,7 +86,7 @@ struct WorkoutEditorWrapper: View {
 	}
 }
 
-extension WorkoutEditorWrapper {
+extension WorkoutRecordEditorWrapper {
 	@Observable
 	class ViewModel {
 		var workout: WorkoutRecord

@@ -61,7 +61,7 @@ struct ExerciseEditor<T: ExerciseCommon>: View {
 				}
 			}
 			.sheet(isPresented: $replaceExerciseSheetPresented) {				
-				ExerciseDetailList(
+				ExerciseDetailsList(
 					onSelect: {
 						if let replacementExercise = modelContext.model(for: $0.id) as? Exercise {
 							exercise.replaceDetails(newDetails: replacementExercise)

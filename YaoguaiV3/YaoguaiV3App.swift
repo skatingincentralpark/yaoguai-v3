@@ -39,7 +39,7 @@ struct YaoguaiV3App: App {
 							Label("Home", systemImage: "figure.dance")
 						}
 					
-					ExerciseDetailList()
+					ExerciseDetailsList()
 						.tabItem {
 							Label("Exercises", systemImage: "list.bullet")
 						}

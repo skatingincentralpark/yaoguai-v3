@@ -1,5 +1,5 @@
 //
-//  ExerciseDetailEditor.swift
+//  ExerciseDetailsEditor.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 28/9/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ExerciseDetailEditor: View {
+struct ExerciseDetailsEditor: View {
 	// This may have to be a @Bindable
 	let exercise: Exercise?
 	
@@ -93,7 +93,7 @@ struct ExerciseDetailEditor: View {
 	}
 }
 
-extension ExerciseDetailEditor {
+extension ExerciseDetailsEditor {
 	private func save() {
 		if let exercise {
 			// Edit the exercise.
@@ -108,9 +108,9 @@ extension ExerciseDetailEditor {
 }
 
 #Preview("Existing Exercise") {
-	ExerciseDetailEditor(exercise: Exercise(name: "Burpees", category: .reps))
+	ExerciseDetailsEditor(exercise: Exercise(name: "Burpees", category: .reps))
 }
 
 #Preview("New Exercise") {
-	ExerciseDetailEditor()
+	ExerciseDetailsEditor()
 }

@@ -31,7 +31,7 @@ struct WorkoutEditor<T: WorkoutCommon>: View {
 			.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 		}
 		.sheet(isPresented: $exerciseListSheetShown, content: {
-			ExerciseDetailList { exerciseDetails in
+			ExerciseDetailsList { exerciseDetails in
 				if let exercise = modelContext.model(for: exerciseDetails.id) as? Exercise {
 					workout.addExercise(details: exercise)
 				} else {

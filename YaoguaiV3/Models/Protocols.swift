@@ -29,7 +29,7 @@ extension WorkoutCommon {
 			
 			/// We don't need to print warning if in test environment
 			if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
-				print("⚠️ Cannot add duplicate exercises to the workout.")
+				track("⚠️ Cannot add duplicate exercises to the workout.")
 			}
 			
 			return
@@ -104,17 +104,17 @@ extension ExerciseCommon {
 	func replaceDetails(newDetails: Exercise) {
 		self.details = newDetails
 		self.sets = self.sets.map { set in
-			 var updatedSet = set
-			 updatedSet.category = newDetails.category
-			 return updatedSet
-		 }
+			var updatedSet = set
+			updatedSet.category = newDetails.category
+			return updatedSet
+		}
 	}
 }
 
 protocol SetCommon: Identifiable, Codable, Equatable {
 	var id: UUID { get set }
 	var category: ExerciseCategory { get set }
-
+	
 	var value: Measurement<UnitMass>? { get set }
 	var reps: Int? { get set }
 	var rpe: Double? { get set }

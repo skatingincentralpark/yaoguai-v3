@@ -49,7 +49,7 @@ struct SetRecord: SetCommon {
 		if isValid {
 			complete.toggle()
 		} else {
-			print("⚠️ SetRecord: Didn't toggle complete because invalid")
+			track("⚠️ SetRecord: Didn't toggle complete because invalid")
 		}
 	}
 	

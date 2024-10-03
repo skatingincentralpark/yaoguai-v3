@@ -42,7 +42,7 @@ struct Dashboard: View {
 						}
 					}
 					
-					WorkoutList()
+					WorkoutRecordList()
 				} header: {
 					Text("Workouts")
 				} footer: {
@@ -61,7 +61,7 @@ struct Dashboard: View {
 			}
 			.sheet(isPresented: $newWorkoutSheetShowing) {
 				if let workout = workoutManager.currentWorkout {
-					WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container, isNewWorkout: true)
+					WorkoutRecordEditorWrapper(workoutId: workout.id, in: modelContext.container, isNewWorkout: true)
 				} else {
 					Text("Loading...")
 				}
@@ -75,33 +75,6 @@ struct Dashboard: View {
 		
 		modelContext.insert(pullups)
 		modelContext.insert(pushups)
-	}
-	
-	struct WorkoutList: View {
-		@Query private var workoutRecords: [WorkoutRecord]
-		@State private var workoutBeingEdited: WorkoutRecord? = nil
-		@Environment(\.modelContext) private var modelContext
-		@Environment(WorkoutManager.self) private var workoutManager
-		var workoutRecordsFiltered: [WorkoutRecord] {
-			workoutRecords.filter { $0.id != workoutManager.currentWorkoutId }
-		}
-		
-		var body: some View {
-			ForEach(workoutRecordsFiltered) { workout in
-				Button(workout.name) {
-					workoutBeingEdited = workout
-				}
-				.swipeActions(edge: .trailing, allowsFullSwipe: true) {
-					Button("Delete") {
-						modelContext.delete(workout)
-					}
-					.tint(.red)
-				}
-			}
-			.sheet(item: $workoutBeingEdited) { workout in
-				WorkoutEditorWrapper(workoutId: workout.id, in: modelContext.container)
-			}
-		}
 	}
 }
 

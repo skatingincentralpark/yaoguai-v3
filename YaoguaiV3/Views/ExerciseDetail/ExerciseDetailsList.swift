@@ -1,5 +1,5 @@
 //
-//  ExerciseDetailList.swift
+//  ExerciseDetailsList.swift
 //  YaoguaiV3
 //
 //  Created by Charles Zhao on 28/9/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ExerciseDetailList: View {
+struct ExerciseDetailsList: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.dismiss) private var dismiss
 	
@@ -70,10 +70,10 @@ struct ExerciseDetailList: View {
 			}
 		}
 		.sheet(isPresented: $newExerciseSheetPresented) {
-			ExerciseDetailEditor()
+			ExerciseDetailsEditor()
 		}
 		.sheet(item: $exerciseToEdit) { exercise in
-			ExerciseDetailEditor(exercise: exercise)
+			ExerciseDetailsEditor(exercise: exercise)
 		}
 	}
 }
@@ -82,7 +82,7 @@ struct ExerciseDetailList: View {
 	do {
 		let (container, _) = try setupPreview()
 		
-		return ExerciseDetailList()
+		return ExerciseDetailsList()
 			.modelContainer(container)
 	} catch {
 		return Text("Failed to build preview")

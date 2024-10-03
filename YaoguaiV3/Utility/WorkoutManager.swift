@@ -50,20 +50,21 @@ final class WorkoutManager {
 			guard FileManager.default.fileExists(atPath: savePath.path) else {
 				return
 			}
+			
 			let data = try Data(contentsOf: savePath)
 			let savedPersistentIdentifier = try JSONDecoder().decode(PersistentIdentifier.self, from: data)
 
 			if let savedWorkout = modelContext.model(for: savedPersistentIdentifier) as? WorkoutRecord {
 				modelContext.insert(savedWorkout)
 				currentWorkout = savedWorkout
-				
-				print("Initialised current workout with saved workout")
+			
+				track("Initialised current workout with saved workout")
 
 			} else {
-				print("No workout saved, won't initialise current workout.")
+				track("No workout saved, won't initialise current workout")
 			}
 		} catch {
-			print("Unable to load data.  \(error.localizedDescription)")
+			track("Unable to load data. \(error.localizedDescription)")
 		}
 	}
 	
@@ -73,7 +74,7 @@ final class WorkoutManager {
 				let data = try JSONEncoder().encode(currentWorkoutId)
 				try data.write(to: savePath, options: [.atomic, .completeFileProtection])
 			} catch {
-				print("Unable to save current workout.  \(error.localizedDescription)")
+				track("Unable to save current workout. \(error.localizedDescription)")
 			}
 		}
 	}
@@ -97,12 +98,13 @@ final class WorkoutManager {
 		do {
 			try FileManager.default.removeItem(at: savePath)
 		} catch {
-			print("Unable to delete saved workout file.  \(error.localizedDescription)")
+			track("Unable to delete saved workout file. \(error.localizedDescription)")
 		}
 	}
 	
 	@MainActor
 	func complete() {
+		track("Completing workout")
 		guard let currentExercises = currentWorkout?.exercises else { return }
 		guard let currentWorkout else { return }
 		
@@ -117,7 +119,7 @@ final class WorkoutManager {
 		try? modelContext.transaction {
 			currentExercises.enumerated().forEach { idx, exercise in
 				if exercise.sets.isEmpty {
-					print("🗑️ Deleting an exercise record because it's empty.")
+					track("🗑️ Deleting an exercise record because it's empty")
 					modelContext.delete(exercise)
 				}
 			}
@@ -125,7 +127,7 @@ final class WorkoutManager {
 		
 		/// Here we DON'T use currentExercises to check, as it's a constant.  We use the original array.
 		/// Items will be auto removed when deleted from the context.
-		print("Remaining exercise records: \(currentWorkout.exercises.count)")
+		track("Remaining exercise records: \(currentWorkout.exercises.count)")
 		
 		/// If there's 0 exercises remaining, don't save the workout
 		if currentWorkout.exercises.count == 0 {
@@ -143,15 +145,15 @@ final class WorkoutManager {
 		
 		do {
 			try FileManager.default.removeItem(at: savePath)
-			print("Removed workoutId from documents.")
+			track("Removed workoutId from documents")
 		} catch {
-			print("Unable to delete saved workout file.  \(error.localizedDescription)")
+			track("Unable to delete saved workout file. \(error.localizedDescription)")
 		}
 	}
 	
 	@MainActor
 	func startNewWorkout() {
-		print("Starting workout.")
+		track("Starting new workout")
 		
 		let newWorkout = WorkoutRecord(name: "New Workout")
 		modelContext.insert(newWorkout)
