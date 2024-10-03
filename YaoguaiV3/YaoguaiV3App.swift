@@ -39,11 +39,6 @@ struct YaoguaiV3App: App {
 							Label("Home", systemImage: "figure.dance")
 						}
 					
-					WorkoutTemplateList()
-						.tabItem {
-							Label("Templates", systemImage: "list.bullet.rectangle.fill")
-						}
-					
 					ExerciseDetailList()
 						.tabItem {
 							Label("Exercises", systemImage: "list.bullet")
@@ -60,14 +55,24 @@ struct YaoguaiV3App: App {
 	
 	struct ModelCounter: View {
 		@Query private var exercises: [Exercise]
+		
 		@Query private var exerciseRecords: [ExerciseRecord]
 		@Query private var workoutRecords: [WorkoutRecord]
 		
+		@Query private var exerciseTemplates: [ExerciseTemplate]
+		@Query private var workoutTemplates: [WorkoutTemplate]
+		
 		var body: some View {
-			VStack {
+			VStack(alignment: .leading) {
 				Text("Exercises count: \(exercises.count)")
+				
 				Text("ExerciseRecords count: \(exerciseRecords.count)")
 				Text("WorkoutRecords count: \(workoutRecords.count)")
+				
+				Text("ExerciseTemplates count: \(exerciseTemplates.count)")
+				Text("WorkoutTemplates count: \(workoutTemplates.count)")
+				
+				Text("© 2024 Yaoguai.")
 			}
 			.font(.footnote.monospaced())
 			.foregroundStyle(.secondary)

@@ -39,4 +39,8 @@ struct SetTemplate: SetCommon {
 	var exercises: [ExerciseTemplate] = []
 	
 	init() {}
+	
+	init(name: String) {
+		self.name = name
+	}
 }

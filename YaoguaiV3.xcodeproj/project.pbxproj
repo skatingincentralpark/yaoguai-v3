@@ -35,6 +35,7 @@
 		A1C5E7512CA0289C00C9B902 /* TimeIntervalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E7502CA0289C00C9B902 /* TimeIntervalPicker.swift */; };
 		A1C5E7552CA7A01800C9B902 /* ExerciseDetailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E7542CA7A01800C9B902 /* ExerciseDetailList.swift */; };
 		A1C5E7572CA7A19100C9B902 /* ExerciseDetailEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E7562CA7A19100C9B902 /* ExerciseDetailEditor.swift */; };
+		A1C5E7602CAE99CC00C9B902 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C5E75F2CAE99CC00C9B902 /* Track.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		A1C5E7502CA0289C00C9B902 /* TimeIntervalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeIntervalPicker.swift; sourceTree = "<group>"; };
 		A1C5E7542CA7A01800C9B902 /* ExerciseDetailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailList.swift; sourceTree = "<group>"; };
 		A1C5E7562CA7A19100C9B902 /* ExerciseDetailEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailEditor.swift; sourceTree = "<group>"; };
+		A1C5E75F2CAE99CC00C9B902 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			children = (
 				A11F268B2C408B4600FD971E /* WorkoutManager.swift */,
 				A13E110F2C979B7E0074BC49 /* PreviewSetup.swift */,
+				A1C5E75F2CAE99CC00C9B902 /* Track.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				A1802C282C7547C700272B66 /* SetEditor.swift in Sources */,
 				A1C5E7572CA7A19100C9B902 /* ExerciseDetailEditor.swift in Sources */,
 				A1802C462C829DB500272B66 /* Collection.swift in Sources */,
+				A1C5E7602CAE99CC00C9B902 /* Track.swift in Sources */,
 				A1802C2A2C7547DF00272B66 /* ExerciseEditor.swift in Sources */,
 				A11F268C2C408B4600FD971E /* WorkoutManager.swift in Sources */,
 				A1802C312C75485700272B66 /* WorkoutEditorWrapper.swift in Sources */,

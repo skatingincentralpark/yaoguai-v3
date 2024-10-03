@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+/// We use the main context for the WorkoutManager
+/// But, for the ViewModel, we use the child context
 struct WorkoutEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(WorkoutManager.self) private var workoutManager

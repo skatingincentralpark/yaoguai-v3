@@ -60,9 +60,7 @@ struct ExerciseEditor<T: ExerciseCommon>: View {
 					.padding(.leading)
 				}
 			}
-			.sheet(isPresented: $replaceExerciseSheetPresented) {
-				Text("Replace Exercise View Goes Here!")
-				
+			.sheet(isPresented: $replaceExerciseSheetPresented) {				
 				ExerciseDetailList(
 					onSelect: {
 						if let replacementExercise = modelContext.model(for: $0.id) as? Exercise {

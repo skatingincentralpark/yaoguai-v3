@@ -20,23 +20,46 @@ struct WorkoutTemplateEditorWrapper: View {
 	}
 	
 	var body: some View {
-	WorkoutEditor(workout: viewModel.workout, modelContext: viewModel.modelContext)
-			.onDisappear {
-				if viewModel.isNewWorkout && !viewModel.modelContext.hasChanges {
-					viewModel.modelContext.delete(viewModel.workout)
-					try? viewModel.modelContext.save()
-				}
-			}
+		WorkoutEditor(workout: viewModel.workout, modelContext: viewModel.modelContext)
 			.toolbar {
-				toolbarContent()
+				if viewModel.isNewWorkout {
+					newToolbarContent()
+				} else {
+					existingToolbarContent()
+				}
 			}
 	}
 	
 	@ToolbarContentBuilder @MainActor
-	func toolbarContent() -> some ToolbarContent {
+	func existingToolbarContent() -> some ToolbarContent {
 		ToolbarItem(placement: .confirmationAction) {
-			Button("Finish") {
-				viewModel.saveWorkout()
+			Button("Save") {
+				viewModel.saveExistingWorkout()
+				dismiss()
+			}
+			.tint(.green)
+		}
+		
+		ToolbarItem(placement: .destructiveAction) {
+			Button("Delete") {
+				viewModel.deleteExistingWorkout()
+				dismiss()
+			}
+			.tint(.red)
+		}
+		
+		ToolbarItem(placement: .cancellationAction) {
+			Button("Cancel") {
+				dismiss()
+			}
+		}
+	}
+	
+	@ToolbarContentBuilder @MainActor
+	func newToolbarContent() -> some ToolbarContent {
+		ToolbarItem(placement: .confirmationAction) {
+			Button("Save") {
+				viewModel.completeNewWorkout()
 				dismiss()
 			}
 			.tint(.green)
@@ -44,14 +67,14 @@ struct WorkoutTemplateEditorWrapper: View {
 		
 		ToolbarItem(placement: .destructiveAction) {
 			Button("Discard") {
-				viewModel.deleteWorkout()
+				viewModel.cancelNewWorkout()
 				dismiss()
 			}
 			.tint(.red)
 		}
 		
 		ToolbarItem(placement: .cancellationAction) {
-			Button("Hide") {
+			Button("Cancel") {
 				dismiss()
 			}
 		}
@@ -75,15 +98,13 @@ extension WorkoutTemplateEditorWrapper {
 			self.isNewWorkout = isNewWorkout
 		}
 		
-		func saveWorkout() {
-			print("Saving Workout...")
+		func saveExistingWorkout() {
 			if modelContext.hasChanges {
-				print("Actually saving...")
 				try? modelContext.save()
 			}
 		}
 		
-		func deleteWorkout() {
+		func deleteExistingWorkout() {
 			/// I think we have to explicitly delete the child exercises as we're in a nested context...
 			try? modelContext.transaction {
 				workout.exercises.forEach { exercise in
@@ -92,6 +113,37 @@ extension WorkoutTemplateEditorWrapper {
 				
 				modelContext.delete(workout)
 			}
+		}
+		
+		func cancelNewWorkout() {
+			try? modelContext.transaction {
+				modelContext.delete(workout)
+				
+				// Although these will be cascade deleted, it won't happen immediately, XCTest assertions fail
+				workout.exercises.forEach { template in
+					modelContext.delete(template)
+				}
+			}
+		}
+		
+		func completeNewWorkout() {
+			track("💾 Attempting to save")
+			
+			if workout.name.isEmpty {
+				track("⚠️ Didn't save, name can't be empty")
+				modelContext.delete(workout)
+				try? modelContext.save()
+				return
+			}
+			
+			if workout.exercises.count == 0 {
+				track("⚠️ Didn't save, exercises can't be empty")
+				modelContext.delete(workout)
+				try? modelContext.save()
+				return
+			}
+			
+			try? modelContext.save()
 		}
 	}
 }

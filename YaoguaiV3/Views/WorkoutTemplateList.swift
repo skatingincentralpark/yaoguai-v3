@@ -12,47 +12,42 @@ struct WorkoutTemplateList: View {
 	@Environment(\.modelContext) private var modelContext
 	@Query private var workoutTemplates: [WorkoutTemplate]
 	@State var sheetPresented = false
-	@State var newTemplate: WorkoutTemplate?
-	
-	@State private var paths: [WorkoutTemplate] = []
+	@State var newTemplate: WorkoutTemplate? = nil
+	@State var templateBeingEdited: WorkoutTemplate? = nil
 	
 	var body: some View {
-		NavigationStack(path: $paths) {
-			VStack {
-				Button("Add Template") {
-					let template = WorkoutTemplate()
-					modelContext.insert(template)
-					newTemplate = template
-					paths.append(template)
-				}
-				
-				ScrollView {
-					Text("\(workoutTemplates.count)")
-					VStack(alignment: .center) {
-						ForEach(workoutTemplates) { template in
-							HStack(spacing: 20) {
-								NavigationLink("Template: \(template.name.isEmpty ? "No Name" : template.name)") {
-									WorkoutTemplateEditorWrapper(workoutId: template.id, in: modelContext.container, isNewWorkout: false)
-								}
-								Button("Delete") {
-									modelContext.delete(template)
-								}
-								.tint(.red)
-							}
-						}
-					}
+		NavigationStack() {
+			Button("Add Template") {
+				let template = WorkoutTemplate(name: "New Workout Template")
+				modelContext.insert(template)
+				try? modelContext.save()
+				newTemplate = template
+			}
+			.sheet(item: $newTemplate) { template in
+				NavigationStack {
+					WorkoutTemplateEditorWrapper(workoutId: template.id, in: modelContext.container, isNewWorkout: true)
 				}
 			}
-			.navigationDestination(for: WorkoutTemplate.self) { template in
-				WorkoutTemplateEditorWrapper(workoutId: template.id, in: modelContext.container, isNewWorkout: true)
+			.sheet(item: $templateBeingEdited) { template in
+				NavigationStack {
+					WorkoutTemplateEditorWrapper(workoutId: template.id, in: modelContext.container, isNewWorkout: false)
+				}
 			}
 		}
-	}
-}
-
-struct Test: View {
-	var body: some View {
-		Text("Hey")
+		
+		ForEach(workoutTemplates) { template in
+			HStack(spacing: 20) {
+				Button(template.name) {
+					templateBeingEdited = template
+				}
+				.swipeActions(edge: .trailing, allowsFullSwipe: true) {
+					Button("Delete") {
+						modelContext.delete(template)
+					}
+					.tint(.red)
+				}
+			}
+		}
 	}
 }
 

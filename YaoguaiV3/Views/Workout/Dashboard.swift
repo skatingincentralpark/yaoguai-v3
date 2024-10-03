@@ -25,9 +25,12 @@ struct Dashboard: View {
 					Button("Delete Exercise Details", role: .destructive) {
 						try? modelContext.delete(model: Exercise.self)
 					}
+					Button("Delete Workout Templates", role: .destructive) {
+						try? modelContext.delete(model: WorkoutTemplate.self)
+					}
 				}
 				
-				Section("Start Workout") {
+				Section {
 					if workoutManager.currentWorkout != nil {
 						Button("Continue Workout"){
 							newWorkoutSheetShowing.toggle()
@@ -40,7 +43,20 @@ struct Dashboard: View {
 					}
 					
 					WorkoutList()
+				} header: {
+					Text("Workouts")
+				} footer: {
+					Label("Swipe left to edit/delete", systemImage: "arrow.left.to.line.compact")
 				}
+				
+				Section {
+					WorkoutTemplateList()
+				} header: {
+					Text("Templates")
+				} footer: {
+					Label("Swipe left to edit/delete", systemImage: "arrow.left.to.line.compact")
+				}
+				
 				
 			}
 			.sheet(isPresented: $newWorkoutSheetShowing) {
@@ -71,22 +87,15 @@ struct Dashboard: View {
 		}
 		
 		var body: some View {
-			VStack {
-				if workoutRecordsFiltered.isEmpty {
-					Label("No Workouts Yet", systemImage: "person.and.background.dotted")
-						.foregroundStyle(.secondary)
-				} else {
-					ForEach(workoutRecordsFiltered) { workout in
-						HStack {
-							Text(workout.name)
-							Button("Edit") {
-								workoutBeingEdited = workout
-							}
-							Button("Delete") {
-								modelContext.delete(workout)
-							}
-						}
+			ForEach(workoutRecordsFiltered) { workout in
+				Button(workout.name) {
+					workoutBeingEdited = workout
+				}
+				.swipeActions(edge: .trailing, allowsFullSwipe: true) {
+					Button("Delete") {
+						modelContext.delete(workout)
 					}
+					.tint(.red)
 				}
 			}
 			.sheet(item: $workoutBeingEdited) { workout in
