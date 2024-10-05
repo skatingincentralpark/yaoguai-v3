@@ -132,16 +132,15 @@ final class CurrentWorkoutManager {
 		/// If there's 0 exercises remaining, don't save the workout
 		if currentWorkout.exercises.count == 0 {
 			modelContext.delete(currentWorkout)
-		}
-		
-		/// Update the latest exercise records
-		currentWorkout.exercises.forEach { record in
-			record.details?.latestRecord = record
+		} else {
+			/// Update the latest exercise records
+			currentWorkout.exercises.forEach { record in
+				record.details?.latestRecord = record
+			}
 		}
 		
 		self.currentWorkoutId = nil
 		self.currentWorkout = nil
-		
 		
 		do {
 			try FileManager.default.removeItem(at: savePath)

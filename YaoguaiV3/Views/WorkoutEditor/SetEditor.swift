@@ -96,7 +96,7 @@ struct SetEditor<T: SetCommon>: View {
 				.buttonStyle(.bordered)
 				.tint(.red)
 				
-				// Check if `set` conforms to SetRecord
+				// If it's a record add a view to toggle complete
 				if let toggleableSet = set as? SetRecord {
 					CompleteToggleView(completeBinding: makeCompleteBinding(for: toggleableSet))
 				}
@@ -108,10 +108,10 @@ struct SetEditor<T: SetCommon>: View {
 	private func makeCompleteBinding(for toggleableSet: SetRecord) -> Binding<Bool> {
 		Binding(get: {
 			toggleableSet.complete
-		}, set: { newValue in
+		}, set: { _ in
 			// Here we manually update the set with the new value
 			var mutableSet = toggleableSet
-			mutableSet.complete = newValue
+			mutableSet.toggleComplete()
 			set = mutableSet as! T // Cast back to T and assign to @Binding set
 		})
 	}

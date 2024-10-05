@@ -14,7 +14,11 @@ struct UnitMassTextField: View {
 		SimpleTextFieldV2(
 			value: Binding(
 				get: {
-					doubleFromMeasurement(value)
+					if let value {
+						doubleFromMeasurement(value)
+					} else {
+						nil
+					}
 				},
 				set: { newValue in
 					if let newValue {
