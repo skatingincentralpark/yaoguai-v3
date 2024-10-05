@@ -8,6 +8,11 @@
 import SwiftUI
 import SwiftData
 
+/// Unlike the `WorkoutRecordEditorWrapper`, we don't ever use
+/// the main context.
+///
+/// Having the child context allows us to easily revert all changes while
+/// editing.
 struct WorkoutTemplateEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
 	@State private var viewModel: ViewModel

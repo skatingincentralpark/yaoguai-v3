@@ -8,8 +8,16 @@
 import SwiftUI
 import SwiftData
 
-/// We use the main context for the WorkoutManager
-/// But, for the ViewModel, we use the child context
+/// We use the main context for the `WorkoutManager` and the child
+/// context for the `ViewModel`.  This is important because we can’t use
+/// objects between different contexts (where they were created/fetched).
+/// So, if we're editing a `WorkoutRecord`, meaning we are passing that
+/// object in from a parent view, we can't simply assign that to the `workout`
+/// in the `ViewModel`, we need to use `modelContext.model` to
+/// fetch it in the child context.
+///
+/// Having the child context allows us to easily revert all changes while
+/// editing.
 struct WorkoutRecordEditorWrapper: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(CurrentWorkoutManager.self) private var workoutManager
