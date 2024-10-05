@@ -11,7 +11,6 @@ import SwiftData
 struct WorkoutTemplateList: View {
 	@Environment(\.modelContext) private var modelContext
 	@Query private var workoutTemplates: [WorkoutTemplate]
-	@State var sheetPresented = false
 	@State var newTemplate: WorkoutTemplate? = nil
 	@State var templateBeingEdited: WorkoutTemplate? = nil
 	
@@ -23,6 +22,16 @@ struct WorkoutTemplateList: View {
 				try? modelContext.save()
 				newTemplate = template
 			}
+			.onChange(of: newTemplate, { oldValue, newValue in
+				if newValue == nil {
+					if let oldValue {
+						if oldValue.name.isEmpty || oldValue.exercises.count == 0 {
+							track("Deleting new template because it's empty")
+							modelContext.delete(oldValue)
+						}
+					}
+				}
+			})
 			.sheet(item: $newTemplate) { template in
 				NavigationStack {
 					WorkoutTemplateEditorWrapper(workoutId: template.id, in: modelContext.container, isNewWorkout: true)
