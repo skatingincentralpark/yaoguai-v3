@@ -80,6 +80,7 @@ struct WorkoutTemplateEditorWrapper: View {
 		
 		ToolbarItem(placement: .cancellationAction) {
 			Button("Cancel") {
+				viewModel.cancelNewWorkout()
 				dismiss()
 			}
 		}
@@ -121,6 +122,7 @@ extension WorkoutTemplateEditorWrapper {
 		}
 		
 		func cancelNewWorkout() {
+			track("Cancelling new workout template")
 			try? modelContext.transaction {
 				modelContext.delete(workout)
 				
