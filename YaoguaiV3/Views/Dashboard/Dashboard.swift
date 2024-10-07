@@ -11,12 +11,40 @@ import SwiftData
 struct Dashboard: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(CurrentWorkoutManager.self) private var workoutManager
+//	@Environment(AlertManager.self) private var alertManager
+	let alertManager = AlertManager.shared
 	
 	@State var newWorkoutSheetShowing = false
 	
 	var body: some View {
 		NavigationStack {
 			List {
+				Section("Alerts") {
+					Button("Add Warning Alert") {
+						withAnimation {
+							alertManager.addAlert("Warning Alert!", type: .warning)
+						}
+					}
+					
+					Button("Add Success Alert") {
+						withAnimation {
+							alertManager.addAlert("Success Alert!", type: .success)
+						}
+					}
+					
+					Button("Add Error Alert") {
+						withAnimation {
+							alertManager.addAlert("Error Alert!", type: .error)
+						}
+					}
+					
+					Button("Add Info Alert") {
+						withAnimation {
+							alertManager.addAlert("Info Alert!", type: .info)
+						}
+					}
+				}
+				
 				Section("Development Helpers") {
 					Button("Add Dummy Exercise Details", action: addDummyExercises)
 					Button("Delete Exercise Records", role: .destructive, action: {
@@ -83,6 +111,9 @@ struct Dashboard: View {
 		let (container, workoutManager) = try setupPreview()
 		
 		return Dashboard()
+			.overlay(alignment: .bottom) {
+				AlertList()
+			}
 			.modelContainer(container)
 			.environment(workoutManager)
 	} catch {

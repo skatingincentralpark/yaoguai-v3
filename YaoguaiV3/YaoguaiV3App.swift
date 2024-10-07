@@ -48,6 +48,9 @@ struct YaoguaiV3App: App {
 					ModelCounter()
 				}
 			}
+			.overlay(alignment: .bottom) {
+				AlertList()
+			}
 		}
 		.modelContainer(sharedModelContainer)
 		.environment(workoutManager)
