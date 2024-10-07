@@ -13,6 +13,7 @@ struct WorkoutTemplateList: View {
 	@Query private var workoutTemplates: [WorkoutTemplate]
 	@State var newTemplate: WorkoutTemplate? = nil
 	@State var templateBeingEdited: WorkoutTemplate? = nil
+	let alertManager = AlertManager.shared
 	
 	var body: some View {
 		NavigationStack() {
@@ -26,7 +27,7 @@ struct WorkoutTemplateList: View {
 				if newValue == nil {
 					if let oldValue {
 						if oldValue.name.isEmpty || oldValue.exercises.count == 0 {
-							track("Deleting new template because it's empty")
+							alertManager.addAlert("Deleting new template because it's empty", type: .warning)
 							modelContext.delete(oldValue)
 						}
 					}

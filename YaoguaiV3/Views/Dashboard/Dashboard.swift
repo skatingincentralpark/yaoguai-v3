@@ -11,7 +11,6 @@ import SwiftData
 struct Dashboard: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(CurrentWorkoutManager.self) private var workoutManager
-//	@Environment(AlertManager.self) private var alertManager
 	let alertManager = AlertManager.shared
 	
 	@State var newWorkoutSheetShowing = false

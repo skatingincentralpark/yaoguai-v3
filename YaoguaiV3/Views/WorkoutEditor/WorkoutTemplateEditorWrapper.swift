@@ -93,6 +93,7 @@ extension WorkoutTemplateEditorWrapper {
 		var workout: WorkoutTemplate
 		let modelContext: ModelContext
 		let isNewWorkout: Bool
+		let alertManager = AlertManager.shared
 		
 		init(workoutId: PersistentIdentifier,
 			 in container: ModelContainer,
@@ -122,7 +123,7 @@ extension WorkoutTemplateEditorWrapper {
 		}
 		
 		func cancelNewWorkout() {
-			track("Cancelling new workout template")
+			alertManager.addAlert("Cancelling new workout template", type: .info)
 			try? modelContext.transaction {
 				modelContext.delete(workout)
 				
@@ -134,17 +135,17 @@ extension WorkoutTemplateEditorWrapper {
 		}
 		
 		func completeNewWorkout() {
-			track("💾 Attempting to save")
+			alertManager.addAlert("Attempting to save", type: .info)
 			
 			if workout.name.isEmpty {
-				track("⚠️ Didn't save, name can't be empty")
+				alertManager.addAlert("Didn't save, name can't be empty", type: .warning)
 				modelContext.delete(workout)
 				try? modelContext.save()
 				return
 			}
 			
 			if workout.exercises.count == 0 {
-				track("⚠️ Didn't save, exercises can't be empty")
+				alertManager.addAlert("Didn't save, exercises can't be empty", type: .warning)
 				modelContext.delete(workout)
 				try? modelContext.save()
 				return

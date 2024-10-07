@@ -49,7 +49,7 @@ struct SetRecord: SetCommon {
 		if isValid {
 			complete.toggle()
 		} else {
-			track("⚠️ SetRecord: Didn't toggle complete because invalid")
+			AlertManager.shared.addAlert("Didn't toggle complete because invalid", type: .warning)
 		}
 	}
 	
