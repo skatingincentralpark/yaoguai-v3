@@ -25,10 +25,10 @@ enum AlertType {
 	
 	var icon: String {
 		switch self {
-		case .success: return "checkmark.circle"
-		case .warning: return "exclamationmark.triangle"
-		case .error: return "xmark.octagon"
-		case .info: return "info.circle"
+		case .success: return "checkmark.circle.fill"
+		case .warning: return "exclamationmark.triangle.fill"
+		case .error: return "xmark.octagon.fill"
+		case .info: return "info.circle.fill"
 		}
 	}
 	
