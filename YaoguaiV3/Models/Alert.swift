@@ -31,6 +31,15 @@ enum AlertType {
 		case .info: return "info.circle"
 		}
 	}
+	
+	var emoji: String {
+		switch self {
+		case .success: return "✅"
+		case .warning: return "⚠️"
+		case .error: return "❌"
+		case .info: return "ℹ️"
+		}
+	}
 }
 
 struct Alert: Identifiable {
@@ -45,12 +54,25 @@ class AlertManager {
 	private(set) var alerts: [Alert] = []
 	
 	func addAlert(_ message: String, type: AlertType) {
-		print("Adding Alert")
-		alerts.append(Alert(message: message, type: type))
+		track("\(type.emoji) \(message)")
+		let newAlert = Alert(message: message, type: type)
+		alerts.append(newAlert)
+		
+		// Use a background task to handle the delay and dismissal
+		Task {
+			// Simulating a background operation
+			try? await Task.sleep(nanoseconds: 2_000_000_000) // Wait for 2 seconds
+			
+			// Switch back to the main thread for UI updates
+			await MainActor.run {
+				withAnimation {
+					self.removeAlert(newAlert) // Remove alert safely on the main thread
+				}
+			}
+		}
 	}
 	
 	func removeAlert(_ alert: Alert) {
-		print("Removing Alert")
 		alerts.removeAll { $0.id == alert.id } // Remove alert using its ID
 	}
 	
