@@ -12,18 +12,18 @@ import Observation
 
 @Observable
 final class CurrentWorkoutManager {
-	var modelContext: ModelContext
-	var currentWorkoutId: PersistentIdentifier? {
+	private(set) var modelContext: ModelContext
+	private(set) var currentWorkoutId: PersistentIdentifier? {
 		didSet {
 			save()
 		}
 	}
-	var currentWorkout: WorkoutRecord? {
+	private(set) var currentWorkout: WorkoutRecord? {
 		didSet {
 			self.currentWorkoutId = currentWorkout?.id
 		}
 	}
-	var startTime: Date
+	private(set) var startTime: Date
 	let alertManager = AlertManager.shared
 	
 	let savePath = URL.documentsDirectory.appending(path: "CurrentWorkout")
